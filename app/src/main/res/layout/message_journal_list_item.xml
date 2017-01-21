@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="10dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@mipmap/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/ivMessageAuthorIcon"
+        android:layout_marginEnd="10dp"/>
+
+    <TextView
+        android:text="Bacon ipsum dolor amet flank picanha tail short ribs, turducken brisket pork bresaola burgdoggen cupim swine landjaeger leberkas. Fatback meatloaf ground round sirloin, t-bone bacon pork frankfurter. Salami tail t-bone tri-tip, meatloaf biltong landjaeger shank."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMessageText"
+        android:layout_below="@+id/tvMessageAuthor"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/ivMessageAuthorIcon"/>
+
+    <TextView
+        android:text="Author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMessageAuthor"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ivMessageAuthorIcon"/>
+
+    <TextView
+        android:text="with somebody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMessageMentions"
+        android:layout_below="@+id/tvMessageText"
+        android:layout_alignStart="@+id/tvMessageText"
+        android:layout_marginTop="10dp"/>
+</RelativeLayout>

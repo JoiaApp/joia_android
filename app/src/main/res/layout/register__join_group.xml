@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <include
+        android:id="@+id/opalHeader"
+        layout="@layout/opal_header"/>
+
+    <TextView
+        style="@style/RegisterExplanation"
+        android:text="Great! Next, let's get your group set up..."/>
+
+    <TextView
+        android:text="Group ID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvGroupID"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/etGroupId"
+        android:inputType="text"
+        android:hint="Enter Group ID"/>
+
+    <TextView
+        android:text="Group Password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvGroupPassword"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/etGroupPassword"
+        android:hint="Enter Password"/>
+
+    <Button
+        android:text="Submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnSubmitJoinGroup"
+        android:textAllCaps="false"/>
+
+</LinearLayout>

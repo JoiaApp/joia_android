@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/llGroupHeader"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="100dp"
+        android:background="@android:color/holo_blue_dark">
+
+        <TextView
+            android:text="College Friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/tvGroupName"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:text="8 Members"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvGroupName"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/tvGroupMemberCount"
+            android:textAlignment="center"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llInviteToGroup"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llGroupHeader"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/btn_dialog"
+            android:id="@+id/ivInviteIcon"
+            />
+
+        <TextView
+            android:text="Invite somebody to this group"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/textView6"
+            android:layout_weight="1.00"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/llInviteToGroup"
+        android:id="@+id/lvGroupMembers"/>
+
+</RelativeLayout>

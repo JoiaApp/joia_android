@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/main_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                tools:context="com.joiaapp.joia.MainActivity">
+
+    <!--<android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+    </android.support.v7.widget.Toolbar>-->
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+
+
+        android:layout_alignParentStart="true"
+        android:minHeight="?attr/actionBarSize">
+        <!--<android.support.design.widget.TabItem-->
+        <!--android:icon="@drawable/ic_pencil"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_width="40dp" />-->
+        <!--<android.support.design.widget.TabItem-->
+        <!--android:icon="@drawable/ic_journal"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_width="40dp" />-->
+        <!--<android.support.design.widget.TabItem-->
+        <!--android:icon="@drawable/ic_group"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_width="40dp" />-->
+        <!--<android.support.design.widget.TabItem-->
+        <!--android:icon="@drawable/ic_settings"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_width="40dp" />-->
+    </android.support.design.widget.TabLayout>
+
+    <RelativeLayout
+        android:id="@+id/navigation_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
+
+        <ImageButton
+            android:id="@+id/btnNavBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            app:srcCompat="@android:drawable/ic_media_previous"
+            android:background="#00000000"
+            />
+
+        <TextView
+            android:id="@+id/tvNavTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Write a Message"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="normal|bold"/>
+
+        <Button
+            android:id="@+id/btnNavNextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next"
+            android:background="#00000000"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:layout_alignBaseline="@+id/tvNavTitle"
+            android:layout_alignBottom="@+id/tvNavTitle"
+            android:layout_alignParentEnd="true"
+            android:textStyle="normal|bold"/>
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_below="@+id/navigation_header"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/tabs"/>
+</RelativeLayout>
