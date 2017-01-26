@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/vfWrite"
+             android:id="@+id/vfRegister"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <include android:id="@+id/loSelectSignIn" layout="@layout/register__select_sign_in"/>
-    <include android:id="@+id/loSignIn" layout="@layout/register__sign_in"/>
     <include android:id="@+id/loChooseGroup" layout="@layout/register__choose_group"/>
     <include android:id="@+id/loJoinGroup" layout="@layout/register__join_group"/>
     <include android:id="@+id/loCreateUser" layout="@layout/register__create_user"/>

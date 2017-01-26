@@ -78,13 +78,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //        m.getMentions().add(u);
 //        dbHelper.createMessage(m);
 
-//        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 //        dbHelper.resetDatabase();
-//        User user = dbHelper.getCurrentUser();
-//        if (user == null) {
-//            Intent intent = new Intent(this, InitialActivity.class);
-//            startActivityForResult(intent, INITIAL_ACTIVITY_REQUEST_CODE);
-//        }
+        User user = dbHelper.getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(this, InitialActivity.class);
+            startActivityForResult(intent, INITIAL_ACTIVITY_REQUEST_CODE);
+        }
 
         btnNavBackButton = (ImageButton) findViewById(R.id.btnNavBackButton);
         btnNavBackButton.setOnClickListener(this);
