@@ -4,11 +4,9 @@ import android.content.Context;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.joiaapp.joia.dto.User;
+import com.joiaapp.joia.requestdto.CreateUser;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -24,71 +22,86 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * Created by arnell on 1/11/2017.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class UserService {
-    private static final String SERVER_BASE_URL = "https://joia-staging.us-west-2.elasticbeanstalk.com";
+    private static final String SERVER_BASE_URL = "http://ec2-35-167-58-219.us-west-2.compute.amazonaws.com";
     private static UserService instance;
     private RequestQueue requestQueue;
+    private User currentUser;
+    private Context context;
 
     private UserService(Context context) {
-        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        this.context = context;
+        requestQueue = Volley.newRequestQueue(this.context);
     }
 
-    public static synchronized UserService getInstance(Context context) {
-        synchronized (UserService.class) {
-            if (instance == null) {
-                instance = new UserService(context);
+    public static void init(Context context) {
+        if (instance == null) {
+            instance = new UserService(context);
 
-                SSLContext ctx = null;
-                try {
-                    ctx = SSLContext.getInstance("TLS");
-                    ctx.init(null, new TrustManager[] {
-                            new X509TrustManager() {
-                                @Override
-                                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            try {
+                SSLContext ctx = SSLContext.getInstance("TLS");
+                ctx.init(null, new TrustManager[] {
+                        new X509TrustManager() {
+                            @Override
+                            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
-                                }
-                                @Override
-                                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                                }
-                                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
                             }
-                    }, null);
-                } catch (NoSuchAlgorithmException | KeyManagementException e) {
-                    e.printStackTrace();
-                }
-                HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
+                            @Override
+                            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
+                            }
+                            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                        }
+                }, null);
+                HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
                 HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
                     public boolean verify(String hostname, SSLSession session) {
                         return true;
                     }
                 });
+            } catch (NoSuchAlgorithmException | KeyManagementException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    public static UserService getInstance() {
         return instance;
     }
 
-
-    public void signIn(String email, String password, RequestHandler requestHandler) {
-        JSONObject signInRequest = new JSONObject();
-        try {
-            signInRequest.put("email", email);
-            signInRequest.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    public void signIn(String email, String password, RequestHandler<User> requestHandler) {
+        SignInRequest signInRequest = new SignInRequest(email, password);
         String url = SERVER_BASE_URL + "/users/login.json";
+        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, signInRequest, requestHandler, requestHandler);
+        requestQueue.add(request);
+    }
 
-        // Request a string response from the provided URL.
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, signInRequest,
-                requestHandler,
-                requestHandler
-        );
-        // Add the request to the RequestQueue.
-        requestQueue.add(jsonObjectRequest);
+    public void setCurrentUser(User currentUser) {
+        DataStorage.getInstance().set("CURRENT_USER", currentUser);
+        this.currentUser = currentUser;
+    }
+
+    public User getCurrentUser() {
+        if (currentUser == null) {
+            currentUser = DataStorage.getInstance().get("CURRENT_USER", User.class);
+        }
+        return currentUser;
+    }
+
+    public void createUser(User newUser, RequestHandler requestHandler) {
+        String url = SERVER_BASE_URL + "/users.json";
+        CreateUser createUserRequest = new CreateUser(newUser);
+        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, createUserRequest, requestHandler, requestHandler);
+        requestQueue.add(request);
+    }
+
+    public void logout() {
+        currentUser = null;
+        CookieManager.getInstance().clearSessionCookie();
+        DataStorage.getInstance().remove("CURRENT_USER");
+        ((MainActivity) context).startSignInProcess();
     }
 }

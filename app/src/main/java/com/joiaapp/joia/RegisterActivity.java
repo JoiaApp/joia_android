@@ -1,15 +1,21 @@
 package com.joiaapp.joia;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
+
+import com.android.volley.VolleyError;
+import com.joiaapp.joia.dto.User;
 
 /**
  * Created by arnell on 1/10/2017.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class RegisterActivity extends Activity implements View.OnClickListener {
@@ -17,25 +23,25 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     ViewFlipper vfRegister;
 
     // register__choose_group.xml
-    private ViewGroup loChooseGroup;
+    private ViewGroup vgChooseGroup;
     private Button btnJoinAGroup;
     private Button btnCreateAGroup;
 
     // register__join_group.xml
-    private ViewGroup loJoinGroup;
+    private ViewGroup vgJoinGroup;
     private EditText etJoinGroupId;
     private EditText etGroupPassword;
     private Button btnSubmitJoinGroup;
 
     // register__create_user.xml
-    private ViewGroup loCreateUser;
+    private ViewGroup vgCreateUser;
     private EditText etName;
     private EditText etEmail;
     private EditText etPassword;
     private Button btnSubmitCreateUser;
 
     // register__create_group.xml
-    private ViewGroup loCreateGroup;
+    private ViewGroup vgCreateGroup;
     private EditText etCreateGroupId;
     private Button btnSubmitCreateGroup;
 
@@ -48,31 +54,31 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
         //TODO: create a separate activity for choosing? and remove register__choose_group.xml from register__all.xml
         // register__choose_group.xml
-        loChooseGroup = (ViewGroup) findViewById(R.id.loChooseGroup);
-        btnJoinAGroup = (Button) loChooseGroup.findViewById(R.id.btnJoinAGroup);
+        vgChooseGroup = (ViewGroup) findViewById(R.id.loChooseGroup);
+        btnJoinAGroup = (Button) vgChooseGroup.findViewById(R.id.btnJoinAGroup);
         btnJoinAGroup.setOnClickListener(this);
-        btnCreateAGroup = (Button) loChooseGroup.findViewById(R.id.btnCreateAGroup);
+        btnCreateAGroup = (Button) vgChooseGroup.findViewById(R.id.btnCreateAGroup);
         btnCreateAGroup.setOnClickListener(this);
 
         // register__join_group.xml
-        loJoinGroup = (ViewGroup) findViewById(R.id.loJoinGroup);
-        etJoinGroupId = (EditText) loJoinGroup.findViewById(R.id.etGroupId);
-        etGroupPassword = (EditText) loJoinGroup.findViewById(R.id.etGroupPassword);
-        btnSubmitJoinGroup = (Button) loJoinGroup.findViewById(R.id.btnSubmitJoinGroup);
+        vgJoinGroup = (ViewGroup) findViewById(R.id.loJoinGroup);
+        etJoinGroupId = (EditText) vgJoinGroup.findViewById(R.id.etGroupId);
+        etGroupPassword = (EditText) vgJoinGroup.findViewById(R.id.etGroupPassword);
+        btnSubmitJoinGroup = (Button) vgJoinGroup.findViewById(R.id.btnSubmitJoinGroup);
         btnSubmitJoinGroup.setOnClickListener(this);
 
         // register__create_user.xml
-        loCreateUser = (ViewGroup) findViewById(R.id.loCreateUser);
-        etName = (EditText) loCreateUser.findViewById(R.id.etName);
-        etEmail = (EditText) loCreateUser.findViewById(R.id.etEmail);
-        etPassword = (EditText) loCreateUser.findViewById(R.id.etPassword);
-        btnSubmitCreateUser = (Button) loCreateUser.findViewById(R.id.btnSubmitCreateUser);
+        vgCreateUser = (ViewGroup) findViewById(R.id.loCreateUser);
+        etName = (EditText) vgCreateUser.findViewById(R.id.etName);
+        etEmail = (EditText) vgCreateUser.findViewById(R.id.etEmail);
+        etPassword = (EditText) vgCreateUser.findViewById(R.id.etPassword);
+        btnSubmitCreateUser = (Button) vgCreateUser.findViewById(R.id.btnSubmitCreateUser);
         btnSubmitCreateUser.setOnClickListener(this);
 
         // register__create_group.xml
-        loCreateGroup = (ViewGroup) findViewById(R.id.loCreateGroup);
-        etCreateGroupId = (EditText) loCreateGroup.findViewById(R.id.etGroupId);
-        btnSubmitCreateGroup = (Button) loCreateGroup.findViewById(R.id.btnSubmitCreateGroup);
+        vgCreateGroup = (ViewGroup) findViewById(R.id.loCreateGroup);
+        etCreateGroupId = (EditText) vgCreateGroup.findViewById(R.id.etGroupId);
+        btnSubmitCreateGroup = (Button) vgCreateGroup.findViewById(R.id.btnSubmitCreateGroup);
         btnSubmitCreateGroup.setOnClickListener(this);
     }
 
@@ -98,27 +104,62 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void onJoinAGroup() {
-        setDisplayedView(loJoinGroup);
+        setDisplayedView(vgJoinGroup);
     }
 
     private void onCreateAGroup() {
-        setDisplayedView(loCreateGroup);
+        setDisplayedView(vgCreateGroup);
     }
 
     private void onSubmitJoinGroup() {
-        setDisplayedView(loCreateUser);
+        setDisplayedView(vgCreateUser);
     }
 
     private void onSubmitCreateUser() {
-        if (etEmail.getEditableText().length() > 0 &&
-                etPassword.getEditableText().length() > 0) {
-            setResult(Activity.RESULT_OK);
-            finish();
+        String name = etName.getEditableText().toString();
+        String email = etEmail.getEditableText().toString();
+        String password = etPassword.getEditableText().toString();
+        if (name.length() == 0) {
+            etName.setError("Required");
+            return;
         }
+        if (email.length() == 0) {
+            etEmail.setError("Required");
+            return;
+        }
+        if (etPassword.length() == 0) {
+            etPassword.setError("Required");
+            return;
+        }
+        User newUser = new User();
+        newUser.setName(name);
+        newUser.setEmail(email);
+        newUser.setPassword(password);
+        UserService userService = UserService.getInstance();
+        userService.createUser(newUser, new RequestHandler<User>() {
+            @Override
+            public void onResponse(User user) {
+                System.out.println("Successful user creation!");
+                System.out.println("User id: " + user.getId());
+                UserService.getInstance().setCurrentUser(user);
+
+                Intent iData = new Intent();
+                setResult(Activity.RESULT_OK, iData);
+                finish();
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("That didn't work!");
+                CharSequence text = "Unable to create user with the provided credentials!";
+                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
     }
 
     private void onSubmitCreateGroup() {
-        setDisplayedView(loCreateUser);
+        setDisplayedView(vgCreateUser);
     }
 
     private void setDisplayedView(View view) {

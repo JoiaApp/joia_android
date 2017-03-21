@@ -12,21 +12,23 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/sym_def_app_icon"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvMemberName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:text="John Doe"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        style="@style/Paragraph"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvMemberRole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Admin"
         android:layout_gravity="center_vertical|end"
-        android:textAlignment="viewEnd"/>
+        android:textAlignment="viewEnd"
+        style="@style/Link"/>
 
 
 </LinearLayout>

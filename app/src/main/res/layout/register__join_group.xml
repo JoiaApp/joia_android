@@ -7,16 +7,16 @@
         android:id="@+id/opalHeader"
         layout="@layout/opal_header"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         style="@style/RegisterExplanation"
         android:text="Great! Next, let's get your group set up..."/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:text="Group ID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvGroupID"
-        />
+        style="@style/FieldLabel"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -26,11 +26,12 @@
         android:inputType="text"
         android:hint="Enter Group ID"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:text="Group Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvGroupPassword"/>
+        android:id="@+id/tvGroupPassword"
+        style="@style/FieldLabel"/>
 
     <EditText
         android:layout_width="match_parent"

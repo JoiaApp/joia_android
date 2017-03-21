@@ -15,9 +15,18 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.joiaapp.joia.group.GroupFragment;
+import com.joiaapp.joia.read.ReadFragment;
+import com.joiaapp.joia.settings.SettingsFragment;
+import com.joiaapp.joia.write.WriteFragment;
+
+/**
+ * Created by arnell on 11/4/2016.
+ * Copyright 2017 Joia. All rights reserved.
+ */
+
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
-//TODO: sign in
 //TODO: create user
 //TODO: join group
 //TODO: create group
@@ -55,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private static final int INITIAL_ACTIVITY_REQUEST_CODE = 10;
 
 
-
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -78,12 +85,16 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //        m.getMentions().add(u);
 //        dbHelper.createMessage(m);
 
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
+//        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 //        dbHelper.resetDatabase();
-        User user = dbHelper.getCurrentUser();
-        if (user == null) {
-            Intent intent = new Intent(this, InitialActivity.class);
-            startActivityForResult(intent, INITIAL_ACTIVITY_REQUEST_CODE);
+//        User user = dbHelper.getCurrentUser();
+
+        DataStorage.init(this);
+        CookieManager.init(this);
+        UserService.init(this);
+
+        if (UserService.getInstance().getCurrentUser() == null) {
+            startSignInProcess();
         }
 
         btnNavBackButton = (ImageButton) findViewById(R.id.btnNavBackButton);
@@ -112,13 +123,18 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabLayout.getTabAt(SETTINGS_PAGE).setIcon(R.drawable.ic_settings);
     }
 
+    public void startSignInProcess() {
+        Intent intent = new Intent(this, InitialActivity.class);
+        startActivityForResult(intent, INITIAL_ACTIVITY_REQUEST_CODE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_CANCELED) {
             finish();
         }
         if (requestCode == INITIAL_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-
+            showWriteView();
         }
     }
 
@@ -203,6 +219,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     public void showJournalView() {
         tabLayout.getTabAt(READ_PAGE).select();
+    }
+
+    public void showWriteView() {
+        tabLayout.getTabAt(WRITE_PAGE).select();
     }
 
     /**

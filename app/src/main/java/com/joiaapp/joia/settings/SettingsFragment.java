@@ -1,20 +1,26 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.settings;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.joiaapp.joia.MainAppFragment;
+import com.joiaapp.joia.R;
+import com.joiaapp.joia.UserService;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by arnell on 12/29/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
-public class SettingsFragment extends Fragment implements View.OnClickListener, MainAppFragment {
+public class SettingsFragment extends Fragment implements AdapterView.OnItemClickListener, MainAppFragment {
 
     private ListView lvSettings;
     private SettingsOptionsArrayAdapter settingsOptionsArrayAdapter;
@@ -27,12 +33,16 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         List<String> settingsOptions = Arrays.asList("Profile", "Group Settings", "Terms & Conditions", "About our Sponsor", "Logout");
         settingsOptionsArrayAdapter = new SettingsOptionsArrayAdapter(getActivity(), settingsOptions);
         lvSettings.setAdapter(settingsOptionsArrayAdapter);
+        lvSettings.setOnItemClickListener(this);
         return rootView;
     }
 
     @Override
-    public void onClick(View v) {
-
+    public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+        String clickedItem = (String) adapter.getItemAtPosition(position);
+        if ("Logout".equals(clickedItem)) {
+            UserService.getInstance().logout();
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.joiaapp.joia;
 
 /**
  * Created by arnell on 1/11/2017.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class SignInRequest {

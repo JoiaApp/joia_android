@@ -8,7 +8,7 @@
         android:id="@+id/opalHeader"
         layout="@layout/opal_header"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         style="@style/RegisterExplanation"
         android:text="Welcome to Joia, let's begin with your group..."/>
 

@@ -8,6 +8,7 @@ import android.widget.Button;
 
 /**
  * Created by arnell on 1/18/2017.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class InitialActivity extends Activity implements View.OnClickListener {
@@ -44,7 +45,12 @@ public class InitialActivity extends Activity implements View.OnClickListener {
             finish();
         }
         if (requestCode == SIGN_IN_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-
+            setResult(Activity.RESULT_OK);
+            finish();
+        }
+        if (requestCode == REGISTER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            setResult(Activity.RESULT_OK);
+            finish();
         }
     }
 }

@@ -4,23 +4,24 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp">
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:text="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvMessageNumber"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:textColor="@color/colorAccent"/>
+        style="@style/Label"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:text="content content content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvMessageNumber"
         android:layout_alignParentStart="true"
         android:id="@+id/tvMessageText"
-        android:paddingTop="8dp"/>
+        android:paddingTop="8dp"
+        style="@style/Paragraph"/>
 
     <LinearLayout
         android:id="@+id/llMessageMentions"
@@ -31,18 +32,20 @@
         android:layout_alignParentStart="true"
         android:paddingTop="8dp">
 
-        <TextView
+        <com.joiaapp.joia.CustomFontTextView
             android:text="with "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            style="@style/Caption"/>
 
-        <TextView
+        <com.joiaapp.joia.CustomFontTextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvMessageMentions"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            style="@style/Caption"/>
     </LinearLayout>
 </RelativeLayout>

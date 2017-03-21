@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvPublishSuccessTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPublishSuccess"
+        android:layout_centerHorizontal="true"
+        android:text="Great Job"
+        style="@style/Title2"/>
+
+    <Button
+        android:id="@+id/btnGoToJournal"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvPublishSuccessMessage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/button_background"
+        android:text="Go to Journal"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="12sp"/>
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvPublishSuccessMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/ivPublishSuccess"
+        android:layout_alignStart="@+id/ivPublishSuccess"
+        android:layout_below="@+id/tvPublishSuccessTitle"
+        android:layout_marginTop="15dp"
+        android:text="Your messages have been published to Friends &amp; Family. There have been 24 new messages posted today in your group journal."
+        android:textAlignment="center"
+        style="@style/Paragraph"/>
+
+    <ImageView
+        android:id="@+id/ivPublishSuccess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        app:srcCompat="@drawable/icon_write"/>
+</RelativeLayout>

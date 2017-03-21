@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.write;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,11 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.joiaapp.joia.R;
+import com.joiaapp.joia.dto.Message;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by arnell on 11/30/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class MessageReviewArrayAdapter extends ArrayAdapter<Message> {

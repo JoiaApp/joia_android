@@ -6,12 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.joiaapp.joia.dto.Message;
+import com.joiaapp.joia.dto.User;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by arnell on 11/4/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 //TODO: don't do database ops on main thread
@@ -53,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + CURRENT_USER_TABLE + "(" + USER_EMAIL_COL + " TEXT PRIMARY KEY, " + USER_NAME_COL + " TEXT, " + USER_PASSWORD_COL + " TEXT)");;
+        db.execSQL("CREATE TABLE " + CURRENT_USER_TABLE + "(" + USER_EMAIL_COL + " TEXT PRIMARY KEY, " + USER_NAME_COL + " TEXT, " + USER_PASSWORD_COL + " TEXT)");
         db.execSQL("CREATE TABLE " + USER_TABLE + "(" + USER_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " + USER_EMAIL_COL + " TEXT, " + USER_NAME_COL + " TEXT)");
         db.execSQL("CREATE TABLE " + MESSAGE_TABLE + "(" + MESSAGE_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, " + MESSAGE_TEXT_COL + " TEXT, " + MESSAGE_USER_COL + " INTEGER, " + MESSAGE_DATE_COL + " INTEGER)");
         db.execSQL("CREATE TABLE " + MESSAGE_MENTION_TABLE + "(" + MESSAGE_ID_COL + " INTEGER, " + USER_ID_COL + " INTEGER)");

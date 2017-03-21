@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.group;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,22 +9,25 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.joiaapp.joia.R;
+import com.joiaapp.joia.dto.User;
+
 import java.util.List;
 
 /**
- * Created by arnell on 12/30/2016.
+ * Created by arnell on 12/23/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
-public class SettingsOptionsArrayAdapter extends ArrayAdapter<String> {
-    private final Context context;
-    private final List<String> options;
+public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
+    private Context context;
     private ViewHolder viewHolder;
+    private List<User> members;
 
-    public SettingsOptionsArrayAdapter(Context context, List<String> options) {
-        super(context, -1, options);
+    public GroupMembersArrayAdapter(Context context, List<User> members) {
+        super(context, -1, members);
         this.context = context;
-        this.options = new ArrayList<>(options);
+        this.members = members;
     }
 
     @Override
@@ -32,20 +35,20 @@ public class SettingsOptionsArrayAdapter extends ArrayAdapter<String> {
     View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.settings_list_item, parent, false);
+            convertView = inflater.inflate(R.layout.member_group_list_item, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.tvSettingName = (TextView) convertView.findViewById(R.id.tvSettingName);
+            viewHolder.tvMemberName = (TextView) convertView.findViewById(R.id.tvMemberName);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        String s = options.get(position);
-        viewHolder.tvSettingName.setText(s);
+        User m = members.get(position);
+        viewHolder.tvMemberName.setText(m.getName());
         return convertView;
     }
 
     private static class ViewHolder {
-        TextView tvSettingName;
+        TextView tvMemberName;
     }
 }

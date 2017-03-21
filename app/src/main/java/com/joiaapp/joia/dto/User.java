@@ -1,7 +1,8 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.dto;
 
 /**
  * Created by arnell on 11/4/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class User {
@@ -9,6 +10,7 @@ public class User {
     private String email;
     private String name;
     private String password;
+    private String role;
 
 
     public int getId() {
@@ -43,4 +45,11 @@ public class User {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

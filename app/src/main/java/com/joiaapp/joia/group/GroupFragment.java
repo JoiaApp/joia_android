@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.group;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,10 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.joiaapp.joia.DatabaseHelper;
+import com.joiaapp.joia.MainAppFragment;
+import com.joiaapp.joia.R;
+import com.joiaapp.joia.dto.User;
+
 import java.util.List;
 
 /**
  * Created by arnell on 12/22/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class GroupFragment extends Fragment implements View.OnClickListener, MainAppFragment {

@@ -12,7 +12,7 @@
         android:layout_height="100dp"
         android:background="@android:color/holo_blue_dark">
 
-        <TextView
+        <com.joiaapp.joia.CustomFontTextView
             android:text="College Friends"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,10 +20,10 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/tvGroupName"
             android:textAlignment="center"
-            android:textSize="24sp"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            style="@style/Headline"/>
 
-        <TextView
+        <com.joiaapp.joia.CustomFontTextView
             android:text="8 Members"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +31,8 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/tvGroupMemberCount"
             android:textAlignment="center"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            style="@style/SubHeading"/>
     </LinearLayout>
 
     <LinearLayout
@@ -49,13 +50,14 @@
             android:id="@+id/ivInviteIcon"
             />
 
-        <TextView
+        <com.joiaapp.joia.CustomFontTextView
             android:text="Invite somebody to this group"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/textView6"
             android:layout_weight="1.00"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            style="@style/Paragraph"/>
     </LinearLayout>
 
     <ListView

@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.write;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
+
+import com.joiaapp.joia.DatabaseHelper;
+import com.joiaapp.joia.MainActivity;
+import com.joiaapp.joia.MainAppFragment;
+import com.joiaapp.joia.R;
+import com.joiaapp.joia.dto.Message;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,15 +26,16 @@ import java.util.List;
 
 /**
  * Created by arnell on 10/28/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class WriteFragment extends Fragment implements View.OnClickListener, MainAppFragment {
     private View rootView;
     private ViewFlipper viewFlipper;
-    private RelativeLayout rlWriteIntro;
-    private LinearLayout llWriteForm;
-    private RelativeLayout rlWriteReview;
-    private RelativeLayout rlPublishSuccess;
+    private ViewGroup vgIntro;
+    private ViewGroup vgForm;
+    private ViewGroup vgReview;
+    private ViewGroup vgPublishSuccess;
 
     private Button btnWriteGetStarted;
 
@@ -61,12 +66,12 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         rootView = inflater.inflate(R.layout.fragment_write, container, false);
 
         viewFlipper = (ViewFlipper) rootView.findViewById(R.id.vfWrite);
-        rlWriteIntro = (RelativeLayout) rootView.findViewById(R.id.rlWriteIntro);
-        llWriteForm = (LinearLayout) rootView.findViewById(R.id.llWriteForm);
-        rlWriteReview = (RelativeLayout) rootView.findViewById(R.id.rlWriteReview);
-        rlPublishSuccess = (RelativeLayout) rootView.findViewById(R.id.rlPublishSuccess);
+        vgIntro = (ViewGroup) rootView.findViewById(R.id.vgIntro);
+        vgForm = (ViewGroup) rootView.findViewById(R.id.vgForm);
+        vgReview = (ViewGroup) rootView.findViewById(R.id.vgReview);
+        vgPublishSuccess = (ViewGroup) rootView.findViewById(R.id.vgPublishSuccess);
 
-        setDisplayedView(rlWriteIntro);
+        setDisplayedView(vgIntro);
 
         btnWriteGetStarted = (Button) rootView.findViewById(R.id.btnWriteGetStarted);
         btnWriteGetStarted.setOnClickListener(this);
@@ -90,13 +95,13 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     private void setDisplayedView(View view) {
         int viewIndex = viewFlipper.indexOfChild(view);
         viewFlipper.setDisplayedChild(viewIndex);
-        if (view.equals(rlWriteIntro) || view.equals(rlPublishSuccess)) {
+        if (view.equals(vgIntro) || view.equals(vgPublishSuccess)) {
             navBackButtonVisible = false;
             navNextButtonVisible = false;
-        } else if (view.equals(llWriteForm)) {
+        } else if (view.equals(vgForm)) {
             navBackButtonVisible = true;
             navNextButtonVisible = true;
-        } else if (view.equals(rlWriteReview)) {
+        } else if (view.equals(vgReview)) {
             navBackButtonVisible = true;
             navNextButtonVisible = false;
         }
@@ -140,10 +145,10 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     }
 
     public void onNavBackButtonTap() {
-        if (viewFlipper.getDisplayedChild() == viewFlipper.indexOfChild(rlWriteReview)) {
+        if (viewFlipper.getDisplayedChild() == viewFlipper.indexOfChild(vgReview)) {
             messagesInProgress.addAll(messageReviewArrayAdapter.getMessages());
             messageReviewArrayAdapter.clear();
-            setDisplayedView(llWriteForm);
+            setDisplayedView(vgForm);
         }
         else {
             Message currentMessage = getCurrentMessageFromView();
@@ -153,7 +158,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         }
         clearWriteFields();
         if (messagesInProgress.isEmpty()) {
-            setDisplayedView(rlWriteIntro);
+            setDisplayedView(vgIntro);
         } else {
             Message lastMessage = messagesInProgress.remove(messagesInProgress.size()-1);
             populateWriteView(lastMessage);
@@ -167,7 +172,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     }
 
     private void reviewMessages() {
-        setDisplayedView(rlWriteReview);
+        setDisplayedView(vgReview);
         lvReviewMessages = (ListView) rootView.findViewById(R.id.lvReviewMessages);
         messageReviewArrayAdapter = new MessageReviewArrayAdapter(getActivity(), messagesInProgress);
         lvReviewMessages.setAdapter(messageReviewArrayAdapter);
@@ -181,7 +186,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         for (Message m : messageReviewArrayAdapter.getMessages()) {
             dbHelper.createMessage(m);
         }
-        setDisplayedView(rlPublishSuccess);
+        setDisplayedView(vgPublishSuccess);
     }
 
     private void clearWriteFields() {
@@ -198,7 +203,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
                 onNavNextButtonTap();
                 break;
             case R.id.btnWriteGetStarted:
-                setDisplayedView(llWriteForm);
+                setDisplayedView(vgForm);
                 onNavNextButtonTap();
                 break;
             case R.id.btnPublishToGroup:

@@ -12,13 +12,14 @@
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/sym_def_app_icon"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvSettingName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:text="Setting 1"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        style="@style/Title2"/>
 
 
 </LinearLayout>

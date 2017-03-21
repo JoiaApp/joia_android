@@ -8,15 +8,16 @@
         android:id="@+id/opalHeader"
         layout="@layout/opal_header"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         style="@style/RegisterExplanation"
         android:text="Welcome to Joia, begin by entering in your information..."/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"/>
+        android:text="Name"
+        style="@style/FieldLabel"/>
 
     <EditText
         android:id="@+id/etName"
@@ -26,12 +27,13 @@
         android:ems="10"
         android:inputType="textPersonName"/>
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Email"/>
+        android:text="Email"
+        style="@style/FieldLabel"/>
 
     <EditText
         android:id="@+id/etEmail"
@@ -41,12 +43,13 @@
         android:inputType="textEmailAddress"/>
 
 
-    <TextView
+    <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Password"/>
+        android:text="Password"
+        style="@style/FieldLabel"/>
 
     <EditText
         android:id="@+id/etPassword"

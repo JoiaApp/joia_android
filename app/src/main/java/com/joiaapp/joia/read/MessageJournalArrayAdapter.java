@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.read;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.joiaapp.joia.R;
+import com.joiaapp.joia.dto.Message;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +19,7 @@ import java.util.List;
 
 /**
  * Created by arnell on 12/20/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {

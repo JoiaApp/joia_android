@@ -9,12 +9,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.joiaapp.joia.dto.User;
 
 /**
  * Created by arnell on 1/9/2017.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class SignInActivity extends Activity implements View.OnClickListener {
@@ -48,16 +47,14 @@ public class SignInActivity extends Activity implements View.OnClickListener {
     }
 
     private void attemptToSignIn(String email, String password) {
-        UserService userService = UserService.getInstance(this);
-        userService.signIn(email, password, new RequestHandler() {
+        UserService userService = UserService.getInstance();
+        userService.signIn(email, password, new RequestHandler<User>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(User user) {
                 System.out.println("Successful login!");
-                try {
-                    System.out.println("User id: " + response.get("id"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                System.out.println("User id: " + user.getId());
+                UserService.getInstance().setCurrentUser(user);
+
                 Intent iData = new Intent();
                 setResult(Activity.RESULT_OK, iData);
                 finish();

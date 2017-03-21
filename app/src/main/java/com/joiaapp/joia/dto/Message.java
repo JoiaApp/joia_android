@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.dto;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -7,6 +7,7 @@ import java.util.Set;
 
 /**
  * Created by arnell on 11/4/2016.
+ * Copyright 2017 Joia. All rights reserved.
  */
 
 public class Message {

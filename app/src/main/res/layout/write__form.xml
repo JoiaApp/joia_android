@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvWriteMessageIndex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="7dp"
+        android:paddingStart="7dp"
+        android:text="1 of 3 Today"
+        style="@style/Label"/>
+
+    <Spinner
+        android:id="@+id/spPrompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etMessageText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="enter positive experience here"
+        android:inputType="textMultiLine"/>
+
+</LinearLayout>
