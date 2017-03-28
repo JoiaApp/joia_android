@@ -1,6 +1,5 @@
 package com.joiaapp.joia;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -17,15 +16,15 @@ public class DataStorage {
     private Gson gson;
 
 
-    private DataStorage(Context context) {
-        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    private DataStorage(MainActivity mainActivity) {
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(mainActivity.getApplicationContext());
         gson = new Gson();
     }
 
-    public static void init(Context context)
+    public static void init(MainActivity mainActivity)
     {
         if (instance == null) {
-            instance = new DataStorage(context);
+            instance = new DataStorage(mainActivity);
         }
     }
 

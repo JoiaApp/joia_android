@@ -1,6 +1,5 @@
 package com.joiaapp.joia;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -20,9 +19,9 @@ public class CookieManager {
 
     private CookieManager() {}
 
-    public static void init(Context context) {
+    public static void init(MainActivity mainActivity) {
         instance = new CookieManager();
-        instance.preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        instance.preferences = PreferenceManager.getDefaultSharedPreferences(mainActivity.getApplicationContext());
     }
 
     public static CookieManager getInstance() {

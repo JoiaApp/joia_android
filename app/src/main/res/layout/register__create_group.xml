@@ -12,19 +12,19 @@
         android:text="Great! Next, let's get your group set up..."/>
 
     <com.joiaapp.joia.CustomFontTextView
-        android:text="Group ID"
+        android:text="Group Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvGroupID"
+        android:id="@+id/tvGroupName"
         style="@style/FieldLabel"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:id="@+id/etGroupId"
+        android:id="@+id/etGroupName"
         android:inputType="text"
-        android:hint="Enter Group ID"/>
+        android:hint="Enter Group Name"/>
 
     <Button
         android:text="Submit"

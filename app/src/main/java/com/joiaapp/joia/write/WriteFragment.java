@@ -109,7 +109,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     }
 
     private Message getCurrentMessageFromView() {
-        String messageText = etMessageText.getEditableText().toString().trim();
+        String messageText = etMessageText.getText().toString().trim();
         String selectedPrompt = (String) spPrompt.getSelectedItem();
         if (messageText.isEmpty()) {
             return null;
@@ -190,7 +190,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     }
 
     private void clearWriteFields() {
-        etMessageText.getEditableText().clear();
+        etMessageText.getText().clear();
     }
 
     @Override

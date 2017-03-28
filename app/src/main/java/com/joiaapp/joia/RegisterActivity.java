@@ -11,7 +11,11 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
+import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
+
+import static com.joiaapp.joia.FieldHelper.getFieldText;
+import static com.joiaapp.joia.FieldHelper.emptyTextFieldCheck;
 
 /**
  * Created by arnell on 1/10/2017.
@@ -42,8 +46,10 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
     // register__create_group.xml
     private ViewGroup vgCreateGroup;
-    private EditText etCreateGroupId;
+    private EditText etCreateGroupName;
     private Button btnSubmitCreateGroup;
+
+    private Group groupToJoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +83,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
         // register__create_group.xml
         vgCreateGroup = (ViewGroup) findViewById(R.id.loCreateGroup);
-        etCreateGroupId = (EditText) vgCreateGroup.findViewById(R.id.etGroupId);
+        etCreateGroupName = (EditText) vgCreateGroup.findViewById(R.id.etGroupName);
         btnSubmitCreateGroup = (Button) vgCreateGroup.findViewById(R.id.btnSubmitCreateGroup);
         btnSubmitCreateGroup.setOnClickListener(this);
     }
@@ -112,29 +118,33 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void onSubmitJoinGroup() {
-        setDisplayedView(vgCreateUser);
+        if (emptyTextFieldCheck("Required", etJoinGroupId, etGroupPassword)) {
+            return;
+        }
+        GroupService.getInstance().getGroup(getFieldText(etJoinGroupId), getFieldText(etGroupPassword), new RequestHandler<Group>() {
+            @Override
+            public void onResponse(Group response) {
+                groupToJoin = response;
+                setDisplayedView(vgCreateUser);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CharSequence text = "Invalid group id or password!";
+                Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
     }
 
     private void onSubmitCreateUser() {
-        String name = etName.getEditableText().toString();
-        String email = etEmail.getEditableText().toString();
-        String password = etPassword.getEditableText().toString();
-        if (name.length() == 0) {
-            etName.setError("Required");
-            return;
-        }
-        if (email.length() == 0) {
-            etEmail.setError("Required");
-            return;
-        }
-        if (etPassword.length() == 0) {
-            etPassword.setError("Required");
+        if (emptyTextFieldCheck("Required", etName, etEmail, etPassword)) {
             return;
         }
         User newUser = new User();
-        newUser.setName(name);
-        newUser.setEmail(email);
-        newUser.setPassword(password);
+        newUser.setName(getFieldText(etName));
+        newUser.setEmail(getFieldText(etEmail));//TODO: validate email
+        newUser.setPassword(getFieldText(etPassword));
         UserService userService = UserService.getInstance();
         userService.createUser(newUser, new RequestHandler<User>() {
             @Override
@@ -143,9 +153,47 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                 System.out.println("User id: " + user.getId());
                 UserService.getInstance().setCurrentUser(user);
 
-                Intent iData = new Intent();
-                setResult(Activity.RESULT_OK, iData);
-                finish();
+                if (groupToJoin.getId() == null) {
+                    // create group
+                    GroupService.getInstance().createGroup(groupToJoin, new RequestHandler<Group>() {
+                        @Override
+                        public void onResponse(Group response) {
+                            GroupService.getInstance().setCurrentGroup(response);
+                            //TODO: still need to join the recently created group, but this callback hell is getting bad. need to reorganize this.
+                            Intent iData = new Intent();
+                            setResult(Activity.RESULT_OK, iData);
+                            finish();
+                        }
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            CharSequence text = "Unable to create group!";
+                            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                            toast.show();
+                            //TODO: recover
+                        }
+                    });
+                } else {
+                    // join group
+                    GroupService.getInstance().joinGroup(groupToJoin, user, new RequestHandler<Group>(){
+                        @Override
+                        public void onResponse(Group response) {
+                            GroupService.getInstance().setCurrentGroup(response);
+
+                            Intent iData = new Intent();
+                            setResult(Activity.RESULT_OK, iData);
+                            finish();
+                        }
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            CharSequence text = "Unable to join group!";
+                            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+                            toast.show();
+                            //TODO: recover
+                        }
+                    });
+                }
             }
 
             @Override
@@ -159,6 +207,13 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     private void onSubmitCreateGroup() {
+        if (emptyTextFieldCheck("Required", etCreateGroupName)) {
+            return;
+        }
+        Group group = new Group();
+        group.setName(getFieldText(etCreateGroupName));
+        groupToJoin = group;
+
         setDisplayedView(vgCreateUser);
     }
 

@@ -1,11 +1,10 @@
 package com.joiaapp.joia;
 
-import android.content.Context;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.joiaapp.joia.dto.User;
+import com.joiaapp.joia.dto.request.SignInRequest;
 import com.joiaapp.joia.requestdto.CreateUser;
 
 import java.security.KeyManagementException;
@@ -30,14 +29,14 @@ public class UserService {
     private static UserService instance;
     private RequestQueue requestQueue;
     private User currentUser;
-    private Context context;
+    private MainActivity mainActivity;
 
-    private UserService(Context context) {
-        this.context = context;
-        requestQueue = Volley.newRequestQueue(this.context);
+    private UserService(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+        requestQueue = Volley.newRequestQueue(this.mainActivity.getApplicationContext());
     }
 
-    public static void init(Context context) {
+    public static void init(MainActivity context) {
         if (instance == null) {
             instance = new UserService(context);
 
@@ -102,6 +101,6 @@ public class UserService {
         currentUser = null;
         CookieManager.getInstance().clearSessionCookie();
         DataStorage.getInstance().remove("CURRENT_USER");
-        ((MainActivity) context).startSignInProcess();
+        mainActivity.startSignInProcess();
     }
 }

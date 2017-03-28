@@ -38,8 +38,8 @@ public class SignInActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.equals(btnSubmit)) {
-            String email = etEmail.getEditableText().toString();
-            String password = etPassword.getEditableText().toString();
+            String email = etEmail.getText().toString();
+            String password = etPassword.getText().toString();
             if (email.length() > 0 && password.length() > 0) {
                 attemptToSignIn(email, password);
             }

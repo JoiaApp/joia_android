@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.dto.request;
 
 /**
  * Created by arnell on 1/11/2017.

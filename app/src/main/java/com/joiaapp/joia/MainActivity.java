@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         DataStorage.init(this);
         CookieManager.init(this);
         UserService.init(this);
+        GroupService.init(this);
 
         if (UserService.getInstance().getCurrentUser() == null) {
             startSignInProcess();
