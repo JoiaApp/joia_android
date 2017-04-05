@@ -33,6 +33,7 @@ public class ReadFragment extends Fragment implements View.OnClickListener, Main
         lvReadMessages = (ListView) rootView.findViewById(R.id.lvReadMessages);
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
         messages.addAll(dbHelper.getMessages());
+        // TODO: load messages from server: GroupService.getInstance().getGroupMessages();
         messageJournalArrayAdapter = new MessageJournalArrayAdapter(getActivity(), messages);
         lvReadMessages.setAdapter(messageJournalArrayAdapter);
         return rootView;

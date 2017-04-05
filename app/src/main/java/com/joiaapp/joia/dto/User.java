@@ -1,23 +1,27 @@
 package com.joiaapp.joia.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by arnell on 11/4/2016.
  * Copyright 2017 Joia. All rights reserved.
  */
 
 public class User {
-    private int id;
+    private Integer id;
     private String email;
     private String name;
     private String password;
     private String role;
+    private transient List<Group> groups = new ArrayList<>();
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -51,5 +55,9 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
     }
 }

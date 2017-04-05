@@ -14,8 +14,8 @@ import com.android.volley.VolleyError;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 
-import static com.joiaapp.joia.FieldHelper.getFieldText;
 import static com.joiaapp.joia.FieldHelper.emptyTextFieldCheck;
+import static com.joiaapp.joia.FieldHelper.getFieldText;
 
 /**
  * Created by arnell on 1/10/2017.
@@ -141,69 +141,39 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         if (emptyTextFieldCheck("Required", etName, etEmail, etPassword)) {
             return;
         }
-        User newUser = new User();
+        final User newUser = new User();
         newUser.setName(getFieldText(etName));
         newUser.setEmail(getFieldText(etEmail));//TODO: validate email
         newUser.setPassword(getFieldText(etPassword));
         UserService userService = UserService.getInstance();
-        userService.createUser(newUser, new RequestHandler<User>() {
+        userService.createUserInGroup(newUser, groupToJoin, new RequestHandler<User>() {
             @Override
             public void onResponse(User user) {
-                System.out.println("Successful user creation!");
-                System.out.println("User id: " + user.getId());
-                UserService.getInstance().setCurrentUser(user);
-
-                if (groupToJoin.getId() == null) {
-                    // create group
-                    GroupService.getInstance().createGroup(groupToJoin, new RequestHandler<Group>() {
-                        @Override
-                        public void onResponse(Group response) {
-                            GroupService.getInstance().setCurrentGroup(response);
-                            //TODO: still need to join the recently created group, but this callback hell is getting bad. need to reorganize this.
-                            Intent iData = new Intent();
-                            setResult(Activity.RESULT_OK, iData);
-                            finish();
-                        }
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            CharSequence text = "Unable to create group!";
-                            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
-                            toast.show();
-                            //TODO: recover
-                        }
-                    });
-                } else {
-                    // join group
-                    GroupService.getInstance().joinGroup(groupToJoin, user, new RequestHandler<Group>(){
-                        @Override
-                        public void onResponse(Group response) {
-                            GroupService.getInstance().setCurrentGroup(response);
-
-                            Intent iData = new Intent();
-                            setResult(Activity.RESULT_OK, iData);
-                            finish();
-                        }
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            CharSequence text = "Unable to join group!";
-                            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
-                            toast.show();
-                            //TODO: recover
-                        }
-                    });
-                }
+                onCreateUserSuccessCallback(user);
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("That didn't work!");
-                CharSequence text = "Unable to create user with the provided credentials!";
+                //TODO: recover
+                CharSequence text;
+                User user = UserService.getInstance().getCurrentUser();
+                Group group = GroupService.getInstance().getCurrentGroup();
+                if (user == null) {
+                    text = "Unable to create user with the provided credentials!";
+                } else if (group == null) {
+                    text = "Unable to create group!";
+                } else {
+                    text = "Unable to join newly created group!";
+                }
                 Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
                 toast.show();
             }
         });
+    }
+    private void onCreateUserSuccessCallback(User user) {
+        Intent iData = new Intent();
+        setResult(Activity.RESULT_OK, iData);
+        finish();
     }
 
     private void onSubmitCreateGroup() {

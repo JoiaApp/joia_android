@@ -48,7 +48,7 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
         for (Message m : newMessages) {
             if (prev == null || !prev.isSameDateAs(m)) {
                 Message separator = new Message();
-                separator.setDate(m.getDate());
+                separator.setCreatedAt(m.getCreatedAt());
                 messages.add(separator);
                 sectionHeaders.add(separator);
             }
@@ -93,9 +93,9 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
             if (m.isSameDateAs(today)) {
                 viewHolder.tvJournalMessageGroupSeparator.setText("Today");
             } else if (!m.isSameYearAs(today)) {
-                viewHolder.tvJournalMessageGroupSeparator.setText(DATE_FORMAT_WITH_YEAR.format(m.getDate()));
+                viewHolder.tvJournalMessageGroupSeparator.setText(DATE_FORMAT_WITH_YEAR.format(m.getCreatedAt()));
             } else {
-                viewHolder.tvJournalMessageGroupSeparator.setText(DATE_FORMAT.format(m.getDate()));
+                viewHolder.tvJournalMessageGroupSeparator.setText(DATE_FORMAT.format(m.getCreatedAt()));
             }
         }
 

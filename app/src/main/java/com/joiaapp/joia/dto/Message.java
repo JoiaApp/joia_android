@@ -12,11 +12,15 @@ import java.util.Set;
 
 public class Message {
     private int id;
-    private String promptText;
+    private String prompt;
+    private Integer prompt_id;
     private String text;
-    private int userId;
-    private Date date;
-    private Set<User> mentions = new HashSet<>();
+    private int group_id;
+    private int user_id;
+    private User user;
+    private Date created_at;
+    private Date updated_at;
+    private transient Set<Mention> mentions = new HashSet<>();
 
     public int getId() {
         return id;
@@ -26,12 +30,20 @@ public class Message {
         this.id = id;
     }
 
-    public String getPromptText() {
-        return promptText;
+    public String getPrompt() {
+        return prompt;
     }
 
-    public void setPromptText(String promptText) {
-        this.promptText = promptText;
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
+
+    public Integer getPrompt_id() {
+        return prompt_id;
+    }
+
+    public void setPrompt_id(Integer prompt_id) {
+        this.prompt_id = prompt_id;
     }
 
     public String getText() {
@@ -43,33 +55,33 @@ public class Message {
     }
 
     public String getFullText() {
-        return promptText + " " + text;
+        return prompt + " " + text;
     }
 
     public int getUserId() {
-        return userId;
+        return user_id;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.user_id = userId;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getCreatedAt() {
+        return created_at;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setCreatedAt(Date date) {
+        this.created_at = date;
     }
 
     public boolean isSameDateAs(Message other) {
-        return isSameDateAs(other.getDate());
+        return isSameDateAs(other.getCreatedAt());
     }
 
     public boolean isSameDateAs(Date other) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
-        cal1.setTime(date);
+        cal1.setTime(getCreatedAt());
         cal2.setTime(other);
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
@@ -78,13 +90,17 @@ public class Message {
     public boolean isSameYearAs(Date other) {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
-        cal1.setTime(date);
+        cal1.setTime(created_at);
         cal2.setTime(other);
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
     }
 
-    public Set<User> getMentions() {
+    public Set<Mention> getMentions() {
         return mentions;
+    }
+
+    public void setMentions(Set<Mention> mentions) {
+        this.mentions = mentions;
     }
 
     public String toString() {
@@ -93,8 +109,8 @@ public class Message {
 
     public String getMentionsStr() {
         String mentionsStr = "";
-        for (User m : mentions) {
-            mentionsStr += m.getName() + ", ";
+        for (Mention m : mentions) {
+            mentionsStr += m.getUser_id() + ", ";
         }
         return mentionsStr;
     }

@@ -27,9 +27,6 @@ import com.joiaapp.joia.write.WriteFragment;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
-//TODO: create user
-//TODO: join group
-//TODO: create group
 //TODO: make everything use webservices instead of database
 //TODO: update all the styling
 //TODO: implement mentions
@@ -76,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 //        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 //        Message m = new Message();
-//        m.setDate(new Date());
+//        m.setCreatedAt(new Date());
 //        m.setText("I appreciate things");
 //        m.setUserId(1);
 //        User u = new User();

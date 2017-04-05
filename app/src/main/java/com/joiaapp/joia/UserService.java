@@ -2,7 +2,9 @@ package com.joiaapp.joia;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.SignInRequest;
 import com.joiaapp.joia.requestdto.CreateUser;
@@ -90,17 +92,63 @@ public class UserService {
         return currentUser;
     }
 
-    public void createUser(User newUser, RequestHandler requestHandler) {
-        String url = SERVER_BASE_URL + "/users.json";
-        CreateUser createUserRequest = new CreateUser(newUser);
-        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, createUserRequest, requestHandler, requestHandler);
-        requestQueue.add(request);
-    }
-
     public void logout() {
         currentUser = null;
         CookieManager.getInstance().clearSessionCookie();
         DataStorage.getInstance().remove("CURRENT_USER");
         mainActivity.startSignInProcess();
+    }
+
+    public void createUserInGroup(User newUser, final Group group, final RequestHandler<User> requestHandler) {
+        createUser(newUser, new RequestHandler<User>() {
+            @Override
+            public void onResponse(final User response) {
+                UserService.getInstance().setCurrentUser(response);
+                if (group.getId() == null) {
+                    // create group
+                    GroupService.getInstance().createGroup(group, new RequestHandler<Group>() {
+                        @Override
+                        public void onResponse(Group createGroupResponse) {
+                            joinGroup(response, createGroupResponse, requestHandler);
+                        }
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            requestHandler.onErrorResponse(error);
+                        }
+                    });
+                } else {
+                    joinGroup(response, group, requestHandler);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                requestHandler.onErrorResponse(error);
+            }
+        });
+    }
+
+    private void joinGroup(final User user, Group group, final RequestHandler<User> requestHandler) {
+        GroupService.getInstance().joinGroup(user, group, new RequestHandler<Group>(){
+            @Override
+            public void onResponse(Group response) {
+                GroupService.getInstance().setCurrentGroup(response);
+                user.getGroups().add(response);
+                requestHandler.onResponse(user);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                requestHandler.onErrorResponse(error);
+            }
+        });
+    }
+
+    private void createUser(User newUser, RequestHandler<User> requestHandler) {
+        String url = SERVER_BASE_URL + "/users.json";
+        CreateUser createUserRequest = new CreateUser(newUser);
+        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, createUserRequest, requestHandler, requestHandler);
+        requestQueue.add(request);
     }
 }

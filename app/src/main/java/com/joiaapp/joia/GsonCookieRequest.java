@@ -9,10 +9,10 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.google.gson.Gson;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,6 @@ import java.util.Map;
  */
 
 public class GsonCookieRequest<T> extends Request<T> {
-    private static Gson gson = new Gson();
     /** Default charset for JSON request. */
     protected static final String PROTOCOL_CHARSET = "utf-8";
 
@@ -48,13 +47,17 @@ public class GsonCookieRequest<T> extends Request<T> {
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         CookieManager.getInstance().extractSessionCookie(response.headers);
-        Class typeClass = ((Class) ((ParameterizedType) mListener.getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+
         try {
             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
-            return Response.success((T)gson.fromJson(jsonString, typeClass), HttpHeaderParser.parseCacheHeaders(response));
+            return Response.success((T)GsonUtil.gson().fromJson(jsonString, getResponseType()), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
         }
+    }
+
+    protected Type getResponseType() {
+        return ((ParameterizedType) mListener.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     @Override
@@ -70,7 +73,7 @@ public class GsonCookieRequest<T> extends Request<T> {
     @Override
     public byte[] getBody() {
         try {
-            return mRequestBody == null ? null : gson.toJson(mRequestBody).getBytes(PROTOCOL_CHARSET);
+            return mRequestBody == null ? null : GsonUtil.gson().toJson(mRequestBody).getBytes(PROTOCOL_CHARSET);
         } catch (UnsupportedEncodingException uee) {
             VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, PROTOCOL_CHARSET);
             return null;

@@ -135,15 +135,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(MESSAGE_TEXT_COL, message.getFullText());
             values.put(MESSAGE_USER_COL, message.getUserId());
-            values.put(MESSAGE_DATE_COL, message.getDate().getTime());
+            values.put(MESSAGE_DATE_COL, message.getCreatedAt().getTime());
             long rowId = db.insert(MESSAGE_TABLE, null, values);
 
-            for (User mention : message.getMentions()) {
-                ContentValues messageMentionValues = new ContentValues();
-                messageMentionValues.put(MESSAGE_ID_COL, rowId);
-                messageMentionValues.put(USER_ID_COL, mention.getId());
-                db.insert(MESSAGE_MENTION_TABLE, null, messageMentionValues);
-            }
+//            for (User mention : message.getMentions()) {
+//                ContentValues messageMentionValues = new ContentValues();
+//                messageMentionValues.put(MESSAGE_ID_COL, rowId);
+//                messageMentionValues.put(USER_ID_COL, mention.getId());
+//                db.insert(MESSAGE_MENTION_TABLE, null, messageMentionValues);
+//            }
         }
         finally {
             close(db);
@@ -162,7 +162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 m.setId(c.getInt(0));
                 m.setText(c.getString(1));
                 m.setUserId(c.getInt(2));
-                m.setDate(new Date(c.getLong(3)));
+                m.setCreatedAt(new Date(c.getLong(3)));
                 messages.add(m);
             }
             return messages;

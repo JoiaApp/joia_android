@@ -4,9 +4,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.joiaapp.joia.dto.Group;
+import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.CreateGroupRequest;
 import com.joiaapp.joia.dto.request.JoinGroupRequest;
+
+import java.util.List;
 
 /**
  * Created by arnell on 3/24/2017.
@@ -53,7 +56,7 @@ public class GroupService {
         requestQueue.add(request);
     }
 
-    public void joinGroup(Group group, User user, RequestHandler<Group> requestHandler) {
+    public void joinGroup(User user, Group group, RequestHandler<Group> requestHandler) {
         JoinGroupRequest joinGroupRequest = new JoinGroupRequest();
         joinGroupRequest.setUserId(user.getId());
         String url = SERVER_BASE_URL + String.format("/groups/%s/join.json", group.getGuid());
@@ -65,6 +68,12 @@ public class GroupService {
         CreateGroupRequest createGroupRequest = new CreateGroupRequest(group);
         String url = SERVER_BASE_URL + "/groups.json";
         GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.POST, url, createGroupRequest, requestHandler);
+        requestQueue.add(request);
+    }
+
+    public void getGroupMessages(Group group, RequestHandler<List<Message>> requestHandler) {
+        String url = SERVER_BASE_URL + "/groups/" + group.getId() + "/responses.json";
+        GsonCookieRequest request = new GsonListCookieRequest<List<Message>>(Request.Method.GET, url, null, requestHandler);
         requestQueue.add(request);
     }
 }

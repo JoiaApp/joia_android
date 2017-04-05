@@ -116,8 +116,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         } else {
             Message message = new Message();
             message.setUserId(1); //TODO: current user
-            message.setDate(new Date());
-            message.setPromptText(selectedPrompt);
+            message.setCreatedAt(new Date());
+            message.setPrompt(selectedPrompt);
             message.setText(messageText);
             return message;
         }
@@ -166,7 +166,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     }
 
     private void populateWriteView(Message message) {
-        int promptIdx = PROMPT_ITEMS.indexOf(message.getPromptText());
+        int promptIdx = PROMPT_ITEMS.indexOf(message.getPrompt());
         spPrompt.setSelection(promptIdx);
         etMessageText.setText(message.getText());
     }

@@ -3,8 +3,6 @@ package com.joiaapp.joia;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.google.gson.Gson;
-
 /**
  * Created by arnell on 3/20/2017.
  * Copyright 2017 Joia. All rights reserved.
@@ -13,12 +11,10 @@ import com.google.gson.Gson;
 public class DataStorage {
     private static DataStorage instance;
     private SharedPreferences preferences;
-    private Gson gson;
 
 
     private DataStorage(MainActivity mainActivity) {
         this.preferences = PreferenceManager.getDefaultSharedPreferences(mainActivity.getApplicationContext());
-        gson = new Gson();
     }
 
     public static void init(MainActivity mainActivity)
@@ -38,12 +34,12 @@ public class DataStorage {
         if (preference == null) {
             return null;
         }
-        return gson.fromJson(preference, type);
+        return GsonUtil.gson().fromJson(preference, type);
     }
 
     public <T> void set(String id, T object) {
         SharedPreferences.Editor prefEditor = preferences.edit();
-        prefEditor.putString(id, gson.toJson(object));
+        prefEditor.putString(id, GsonUtil.gson().toJson(object));
         prefEditor.apply();
     }
 
