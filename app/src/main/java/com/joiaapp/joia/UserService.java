@@ -27,7 +27,7 @@ import javax.net.ssl.X509TrustManager;
  */
 
 public class UserService {
-    private static final String SERVER_BASE_URL = "http://ec2-35-167-58-219.us-west-2.compute.amazonaws.com";
+    private static final String SERVER_BASE_URL = "http://sample-env.qd8vv2zefd.us-west-2.elasticbeanstalk.com";
     private static UserService instance;
     private RequestQueue requestQueue;
     private User currentUser;

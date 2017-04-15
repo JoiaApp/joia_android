@@ -72,24 +72,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         setContentView(R.layout.activity_main);
 
 //        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-//        Message m = new Message();
-//        m.setCreatedAt(new Date());
-//        m.setText("I appreciate things");
-//        m.setUserId(1);
-//        User u = new User();
-//        u.setId(1);
-//        u.setName("Greg");
-//        m.getMentions().add(u);
-//        dbHelper.createMessage(m);
-
-//        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
 //        dbHelper.resetDatabase();
-//        User user = dbHelper.getCurrentUser();
 
         DataStorage.init(this);
         CookieManager.init(this);
         UserService.init(this);
         GroupService.init(this);
+        PromptService.init(this);
 
         if (UserService.getInstance().getCurrentUser() == null) {
             startSignInProcess();

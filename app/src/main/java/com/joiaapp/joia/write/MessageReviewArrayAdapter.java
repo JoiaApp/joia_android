@@ -47,7 +47,7 @@ public class MessageReviewArrayAdapter extends ArrayAdapter<Message> {
 
         Message m = getItem(position);
         viewHolder.tvMessageNumber.setText(String.valueOf(position+1));
-        viewHolder.tvMessageText.setText(m.getFullText());
+        viewHolder.tvMessageText.setText(m.getText());
         if (m.getMentions().isEmpty()) {
             viewHolder.llMessageMentions.setVisibility(View.GONE);
         } else {

@@ -14,7 +14,9 @@ public class Message {
     private int id;
     private String prompt;
     private Integer prompt_id;
+    private transient Prompt promptObj;
     private String text;
+    private transient String userText;
     private int group_id;
     private int user_id;
     private User user;
@@ -34,28 +36,32 @@ public class Message {
         return prompt;
     }
 
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
-    }
-
-    public Integer getPrompt_id() {
+    public Integer getPromptId() {
         return prompt_id;
     }
 
-    public void setPrompt_id(Integer prompt_id) {
-        this.prompt_id = prompt_id;
+    public Prompt getPromptObj() {
+        return promptObj;
+    }
+
+    private void setPromptObj(Prompt promptObj) {
+        this.promptObj = promptObj;
+        this.prompt = promptObj.getPhrase();
+        this.prompt_id = promptObj.getId();
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public String getUserText() {
+        return userText;
     }
 
-    public String getFullText() {
-        return prompt + " " + text;
+    public void setText(Prompt prompt, String userText) {
+        setPromptObj(prompt);
+        this.userText = userText;
+        this.text = prompt + " " + userText;
     }
 
     public int getUserId() {
@@ -64,6 +70,14 @@ public class Message {
 
     public void setUserId(int userId) {
         this.user_id = userId;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Date getCreatedAt() {
@@ -104,7 +118,7 @@ public class Message {
     }
 
     public String toString() {
-        return text + "\n-" + getMentionsStr();
+        return userText + "\n-" + getMentionsStr();
     }
 
     public String getMentionsStr() {

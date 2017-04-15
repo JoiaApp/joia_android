@@ -2,6 +2,7 @@ package com.joiaapp.joia;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.Message;
@@ -9,6 +10,7 @@ import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.CreateGroupRequest;
 import com.joiaapp.joia.dto.request.JoinGroupRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ import java.util.List;
  */
 
 public class GroupService {
-    private static final String SERVER_BASE_URL = "http://ec2-35-167-58-219.us-west-2.compute.amazonaws.com";
+    private static final String SERVER_BASE_URL = "http://sample-env.qd8vv2zefd.us-west-2.elasticbeanstalk.com";
     private static GroupService instance;
     private RequestQueue requestQueue;
     private MainActivity mainActivity;
@@ -72,8 +74,38 @@ public class GroupService {
     }
 
     public void getGroupMessages(Group group, RequestHandler<List<Message>> requestHandler) {
-        String url = SERVER_BASE_URL + "/groups/" + group.getId() + "/responses.json";
+        String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/responses.json";
         GsonCookieRequest request = new GsonListCookieRequest<List<Message>>(Request.Method.GET, url, null, requestHandler);
+        requestQueue.add(request);
+    }
+
+    public void publishGroupMessages(Group group, List<Message> messages, RequestHandler<List<Message>> requestHandler) {
+        String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/responses.json";
+        publishGroupMessage(url, messages, requestHandler, new ArrayList<Message>());
+    }
+
+    private void publishGroupMessage(final String url, final List<Message> messages, final RequestHandler<List<Message>> finalRequestHandler, final List<Message> failedPublishes) {
+        GsonCookieRequest request = new GsonCookieRequest<Message>(Request.Method.POST, url, messages.get(0), new RequestHandler<Message>() {
+            @Override
+            public void onResponse(Message response) {
+                messages.remove(0);
+                if (messages.isEmpty()) {
+                    finalRequestHandler.onResponse(failedPublishes);
+                } else {
+                    publishGroupMessage(url, messages, finalRequestHandler, failedPublishes);
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                failedPublishes.add(messages.remove(0));
+                if (messages.isEmpty()) {
+                    finalRequestHandler.onResponse(failedPublishes);
+                } else {
+                    publishGroupMessage(url, messages, finalRequestHandler, failedPublishes);
+                }
+            }
+        });
         requestQueue.add(request);
     }
 }

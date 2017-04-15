@@ -6,13 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.joiaapp.joia.DatabaseHelper;
+import com.android.volley.VolleyError;
+import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
+import com.joiaapp.joia.RequestHandler;
 import com.joiaapp.joia.dto.Message;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +25,6 @@ import java.util.List;
 public class ReadFragment extends Fragment implements View.OnClickListener, MainAppFragment {
     ListView lvReadMessages;
     MessageJournalArrayAdapter messageJournalArrayAdapter;
-    List<Message> messages = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,18 +32,26 @@ public class ReadFragment extends Fragment implements View.OnClickListener, Main
         View rootView = inflater.inflate(R.layout.fragment_read, container, false);
 
         lvReadMessages = (ListView) rootView.findViewById(R.id.lvReadMessages);
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
-        messages.addAll(dbHelper.getMessages());
-        // TODO: load messages from server: GroupService.getInstance().getGroupMessages();
-        messageJournalArrayAdapter = new MessageJournalArrayAdapter(getActivity(), messages);
+        messageJournalArrayAdapter = new MessageJournalArrayAdapter(getActivity());
         lvReadMessages.setAdapter(messageJournalArrayAdapter);
+        refreshView();
         return rootView;
     }
 
     public void refreshView() {
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
-        List<Message> updatedMessages = dbHelper.getMessages();
-        messageJournalArrayAdapter.setMessages(updatedMessages);
+        GroupService groupService = GroupService.getInstance();
+        groupService.getGroupMessages(groupService.getCurrentGroup(), new RequestHandler<List<Message>>() {
+            @Override
+            public void onResponse(List<Message> response) {
+                messageJournalArrayAdapter.setMessages(response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Failed to load messages.", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
     }
 
     @Override

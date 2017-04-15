@@ -11,16 +11,21 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-import com.joiaapp.joia.DatabaseHelper;
+import com.android.volley.VolleyError;
+import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.MainActivity;
 import com.joiaapp.joia.MainAppFragment;
+import com.joiaapp.joia.PromptService;
 import com.joiaapp.joia.R;
+import com.joiaapp.joia.RequestHandler;
+import com.joiaapp.joia.UserService;
 import com.joiaapp.joia.dto.Message;
+import com.joiaapp.joia.dto.Prompt;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +58,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     private List<Message> unfinishedMessages = new ArrayList<>();
     private static final int TOTAL_MESSAGES = 3;
 
-    private static final List<String> PROMPT_ITEMS = Arrays.asList("I smiled today because ...", "I felt loved today because ...", "My day changed when ...", "I laughed today when ...", "I appreciate that ...", "(none)");
+    ArrayAdapter<Prompt> promptArrayAdapter;
 
     //Nav Settings
     private String navTitle = "Write a Message";
@@ -78,9 +83,23 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
 
         spPrompt = (Spinner) rootView.findViewById(R.id.spPrompt);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(inflater.getContext(), android.R.layout.simple_spinner_dropdown_item, PROMPT_ITEMS);
-        spPrompt.setAdapter(adapter);
+        promptArrayAdapter = new ArrayAdapter<>(inflater.getContext(), android.R.layout.simple_spinner_dropdown_item, new ArrayList<Prompt>());
+        spPrompt.setAdapter(promptArrayAdapter);
 
+        PromptService.getInstance().getPrompts(new RequestHandler<List<Prompt>>() {
+            @Override
+            public void onResponse(List<Prompt> response) {
+                // TODO: add a "(none)" response
+                promptArrayAdapter.addAll(response);
+                promptArrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Failed to load prompts.", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
 
         etMessageText = (EditText) rootView.findViewById(R.id.etMessageText);
         tvWriteMessageIndex = (TextView) rootView.findViewById(R.id.tvWriteMessageIndex);
@@ -110,15 +129,14 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
 
     private Message getCurrentMessageFromView() {
         String messageText = etMessageText.getText().toString().trim();
-        String selectedPrompt = (String) spPrompt.getSelectedItem();
+        Prompt selectedPrompt = (Prompt) spPrompt.getSelectedItem();
         if (messageText.isEmpty()) {
             return null;
         } else {
             Message message = new Message();
-            message.setUserId(1); //TODO: current user
+            message.setUserId(UserService.getInstance().getCurrentUser().getId());
             message.setCreatedAt(new Date());
-            message.setPrompt(selectedPrompt);
-            message.setText(messageText);
+            message.setText(selectedPrompt, messageText);
             return message;
         }
     }
@@ -133,11 +151,11 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
                 messagesInProgress.add(message);
             }
             if (messagesInProgress.size() < TOTAL_MESSAGES) {
-                tvWriteMessageIndex.setText(String.format("%s of %s Today", messagesInProgress.size() + 1, TOTAL_MESSAGES));
                 if (!unfinishedMessages.isEmpty()) {
                     Message lastUnfinished = unfinishedMessages.remove(unfinishedMessages.size()-1);
                     populateWriteView(lastUnfinished);
                 }
+                updateMessageIndexLabel();
             } else {
                 reviewMessages();
             }
@@ -162,13 +180,18 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         } else {
             Message lastMessage = messagesInProgress.remove(messagesInProgress.size()-1);
             populateWriteView(lastMessage);
+            updateMessageIndexLabel();
         }
     }
 
     private void populateWriteView(Message message) {
-        int promptIdx = PROMPT_ITEMS.indexOf(message.getPrompt());
+        int promptIdx = promptArrayAdapter.getPosition(message.getPromptObj());
         spPrompt.setSelection(promptIdx);
-        etMessageText.setText(message.getText());
+        etMessageText.setText(message.getUserText());
+    }
+
+    private void updateMessageIndexLabel() {
+        tvWriteMessageIndex.setText(String.format("%s of %s Today", messagesInProgress.size() + 1, TOTAL_MESSAGES));
     }
 
     private void reviewMessages() {
@@ -182,11 +205,24 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     }
 
     private void publishReviewedMessages() {
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
-        for (Message m : messageReviewArrayAdapter.getMessages()) {
-            dbHelper.createMessage(m);
-        }
-        setDisplayedView(vgPublishSuccess);
+        GroupService groupService = GroupService.getInstance();
+        groupService.publishGroupMessages(groupService.getCurrentGroup(), messageReviewArrayAdapter.getMessages(), new RequestHandler<List<Message>>() {
+            @Override
+            public void onResponse(List<Message> response) {
+                if (response.isEmpty()) {
+                    setDisplayedView(vgPublishSuccess);
+                } else {
+                    //TODO: handle failed publishes
+                    Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Failed to publish messages.", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Not used for GroupService.publishGroupMessages()
+            }
+        });
     }
 
     private void clearWriteFields() {

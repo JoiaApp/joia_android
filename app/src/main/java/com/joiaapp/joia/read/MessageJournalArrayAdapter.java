@@ -35,6 +35,11 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
     private List<Message> sectionHeaders = new ArrayList<>();
     private final LayoutInflater inflater;
 
+    public MessageJournalArrayAdapter(Context context)
+    {
+        this(context, new ArrayList<Message>());
+    }
+
     public MessageJournalArrayAdapter(Context context, List<Message> messages) {
         super(context, -1, messages);
         this.context = context;
@@ -80,7 +85,7 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
 
         Message m = messages.get(position);
         if (rowType == TYPE_ITEM) {
-            viewHolder.tvMessageAuthor.setText(String.valueOf(m.getUserId()));
+            viewHolder.tvMessageAuthor.setText(String.valueOf(m.getUser().getName()));
             viewHolder.tvMessageText.setText(m.getText());
             if (m.getMentions().isEmpty()) {
                 viewHolder.tvMessageMentions.setVisibility(View.GONE);
