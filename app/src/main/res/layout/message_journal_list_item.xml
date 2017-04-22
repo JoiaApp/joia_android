@@ -9,13 +9,13 @@
                 android:paddingTop="10dp">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@mipmap/ic_launcher"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
         android:id="@+id/ivMessageAuthorIcon"
-        android:layout_marginEnd="10dp"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="10dp"
+        app:srcCompat="@mipmap/ic_launcher"/>
 
     <com.joiaapp.joia.CustomFontTextView
         android:text="Author"

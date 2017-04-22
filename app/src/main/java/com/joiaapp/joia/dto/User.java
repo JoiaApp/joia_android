@@ -14,6 +14,7 @@ public class User {
     private String name;
     private String password;
     private String role;
+    private String image;
     private transient List<Group> groups = new ArrayList<>();
 
 
@@ -55,6 +56,14 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public List<Group> getGroups() {

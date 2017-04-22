@@ -1,14 +1,17 @@
 package com.joiaapp.joia.read;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.dto.Message;
 
@@ -74,6 +77,7 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
                 viewHolder.tvMessageAuthor = (TextView) convertView.findViewById(R.id.tvMessageAuthor);
                 viewHolder.tvMessageText = (TextView) convertView.findViewById(R.id.tvMessageText);
                 viewHolder.tvMessageMentions = (TextView) convertView.findViewById(R.id.tvMessageMentions);
+                viewHolder.ivMessageAuthorIcon = (ImageView) convertView.findViewById(R.id.ivMessageAuthorIcon);
             } else {
                 convertView = inflater.inflate(R.layout.message_journal_separator_item, parent, false);
                 viewHolder.tvJournalMessageGroupSeparator = (TextView) convertView.findViewById(R.id.tvJournalMessageGroupSeparator);
@@ -93,6 +97,8 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
                 viewHolder.tvMessageMentions.setVisibility(View.VISIBLE);
                 viewHolder.tvMessageMentions.setText(m.getMentionsStr());
             }
+            Bitmap userImage = GroupService.getInstance().getGroupMemberImageBitmap(m.getUser());
+            viewHolder.ivMessageAuthorIcon.setImageBitmap(userImage);
         } else {
             Date today = new Date();
             if (m.isSameDateAs(today)) {
@@ -131,5 +137,6 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
         TextView tvMessageText;
         TextView tvMessageMentions;
         TextView tvJournalMessageGroupSeparator;
+        ImageView ivMessageAuthorIcon;
     }
 }

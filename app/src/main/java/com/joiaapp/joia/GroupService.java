@@ -1,5 +1,10 @@
 package com.joiaapp.joia;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -12,6 +17,8 @@ import com.joiaapp.joia.dto.request.JoinGroupRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by arnell on 3/24/2017.
@@ -71,6 +78,32 @@ public class GroupService {
         String url = SERVER_BASE_URL + "/groups.json";
         GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.POST, url, createGroupRequest, requestHandler);
         requestQueue.add(request);
+    }
+
+    public void getGroupMembers(Group group, RequestHandler<List<User>> requestHandler) {
+        String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/members.json";
+        GsonCookieRequest request = new GsonListCookieRequest<List<User>>(Request.Method.GET, url, null, requestHandler);
+        requestQueue.add(request);
+    }
+
+    public Bitmap getGroupMemberImageBitmap(User user) {
+        // TODO: save the bitmaps so that they can be reused.
+        /* TODO: update usages of this to use a separate thread??
+        new Thread(new Runnable() {
+            public void run() {
+            }
+        }).start();
+         */
+        if (user.getImage() != null) {
+            try {
+                byte[] imageBytes = Base64.decode(user.getImage(), Base64.DEFAULT);
+                return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            }
+            catch (Exception e) {
+                Log.w(TAG, "Failed to decode image", e);
+            }
+        }
+        return BitmapFactory.decodeResource(mainActivity.getApplicationContext().getResources(), R.mipmap.ic_launcher);
     }
 
     public void getGroupMessages(Group group, RequestHandler<List<Message>> requestHandler) {

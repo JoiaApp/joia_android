@@ -6,12 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.joiaapp.joia.DatabaseHelper;
+import com.android.volley.VolleyError;
+import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
+import com.joiaapp.joia.RequestHandler;
+import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +26,8 @@ import java.util.List;
  */
 
 public class GroupFragment extends Fragment implements View.OnClickListener, MainAppFragment {
+    private TextView tvGroupName;
+    private TextView tvGroupMemberCount;
     private ListView lvGroupMembers;
     private GroupMembersArrayAdapter groupMembersArrayAdapter;
 
@@ -27,11 +35,27 @@ public class GroupFragment extends Fragment implements View.OnClickListener, Mai
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
 
-        DatabaseHelper dbHelper = DatabaseHelper.getInstance(getActivity());
-        List<User> members = dbHelper.getGroupMembers();
+        tvGroupName = (TextView) rootView.findViewById(R.id.tvGroupName);
+        tvGroupMemberCount = (TextView) rootView.findViewById(R.id.tvGroupMemberCount);
         lvGroupMembers = (ListView) rootView.findViewById(R.id.lvGroupMembers);
-        groupMembersArrayAdapter = new GroupMembersArrayAdapter(getActivity(), members);
+        groupMembersArrayAdapter = new GroupMembersArrayAdapter(getActivity(), new ArrayList<User>());
         lvGroupMembers.setAdapter(groupMembersArrayAdapter);
+        GroupService groupService = GroupService.getInstance();
+        final Group group = groupService.getCurrentGroup();
+        groupService.getGroupMembers(group, new RequestHandler<List<User>>() {
+            @Override
+            public void onResponse(List<User> response) {
+                tvGroupName.setText(group.getName());
+                tvGroupMemberCount.setText(String.format("%s Members", response.size()));
+                groupMembersArrayAdapter.setMembers(response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Failed to load group members.", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
         return rootView;
     }
 

@@ -8,9 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.joiaapp.joia.dto.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by arnell on 11/4/2016.
  * Copyright 2017 Joia. All rights reserved.
@@ -108,18 +105,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //close(db);
     }
 
-    public List<User> getGroupMembers() {
-        List<User> members = new ArrayList<>();
-        members.add(generateUser("Jane Silva"));
-        members.add(generateUser("Daisy Watkins"));
-        members.add(generateUser("Jessie Wallace"));
-        members.add(generateUser("Michael Simpson"));
-        members.add(generateUser("Edith Turner"));
-        members.add(generateUser("Jayden Barnett"));
-        members.add(generateUser("Shelly Kennedy"));
-        members.add(generateUser("Jessica King"));
-        return members;
-    }
     private User generateUser(String name) {
         User u = new User();
         u.setName(name);

@@ -11,7 +11,7 @@ import java.util.Set;
  */
 
 public class Message {
-    private int id;
+    private Integer id;
     private String prompt;
     private Integer prompt_id;
     private transient Prompt promptObj;
@@ -24,11 +24,11 @@ public class Message {
     private Date updated_at;
     private transient Set<Mention> mentions = new HashSet<>();
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
