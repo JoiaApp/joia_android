@@ -1,10 +1,14 @@
 package com.joiaapp.joia.write;
 
+import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,6 +106,17 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         });
 
         etMessageText = (EditText) rootView.findViewById(R.id.etMessageText);
+        // TODO: put this somewhere else
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                rootView.getWindowVisibleDisplayFrame(r);
+
+                int heightDiff = rootView.getRootView().getHeight() - (r.bottom - r.top);
+                ((MainActivity) getActivity()).setTabLayoutHidden(heightDiff > 100);
+            }
+        });
         tvWriteMessageIndex = (TextView) rootView.findViewById(R.id.tvWriteMessageIndex);
         tvWriteMessageIndex.setText(String.format("%s of %s Today", 1, TOTAL_MESSAGES));
 
@@ -202,15 +217,22 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         btnPublishToGroup = (Button) rootView.findViewById(R.id.btnPublishToGroup);
         btnPublishToGroup.setOnClickListener(this);
         messagesInProgress.clear();
+        // TODO: put this somewhere else
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getRootView().getWindowToken(), 0);
     }
 
     private void publishReviewedMessages() {
-        GroupService groupService = GroupService.getInstance();
+        final GroupService groupService = GroupService.getInstance();
         groupService.publishGroupMessages(groupService.getCurrentGroup(), messageReviewArrayAdapter.getMessages(), new RequestHandler<List<Message>>() {
             @Override
             public void onResponse(List<Message> response) {
                 if (response.isEmpty()) {
                     setDisplayedView(vgPublishSuccess);
+                    TextView tvPublishSuccessMessage = (TextView) rootView.findViewById(R.id.tvPublishSuccessMessage);
+                    tvPublishSuccessMessage.setText(String.format("Your messages have been published to %s. There have been %s new messages posted today in your group journal.",
+                            groupService.getCurrentGroup().getName(), groupService.getNumberOfNewMessagesTodayFromCache()));
+
                 } else {
                     //TODO: handle failed publishes
                     Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Failed to publish messages.", Toast.LENGTH_LONG);

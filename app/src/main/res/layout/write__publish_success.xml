@@ -35,7 +35,7 @@
         android:layout_alignStart="@+id/ivPublishSuccess"
         android:layout_below="@+id/tvPublishSuccessTitle"
         android:layout_marginTop="15dp"
-        android:text="Your messages have been published to Friends &amp; Family. There have been 24 new messages posted today in your group journal."
+        android:text="Your messages have been published to XYZ. There have been ## new messages posted today in your group journal."
         android:textAlignment="center"
         style="@style/Paragraph"/>
 

@@ -9,7 +9,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
+
+import java.util.List;
 
 /**
  * Created by arnell on 1/9/2017.
@@ -51,9 +54,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         userService.signIn(email, password, new RequestHandler<User>() {
             @Override
             public void onResponse(User user) {
-                System.out.println("Successful login!");
-                System.out.println("User id: " + user.getId());
-                UserService.getInstance().setCurrentUser(user);
+
 
                 Intent iData = new Intent();
                 setResult(Activity.RESULT_OK, iData);

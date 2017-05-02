@@ -13,6 +13,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -73,10 +74,37 @@ public class UserService {
         return instance;
     }
 
-    public void signIn(String email, String password, RequestHandler<User> requestHandler) {
+    public void signIn(String email, String password, final RequestHandler<User> requestHandler) {
         SignInRequest signInRequest = new SignInRequest(email, password);
         String url = SERVER_BASE_URL + "/users/login.json";
-        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, signInRequest, requestHandler, requestHandler);
+
+        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, signInRequest, new RequestHandler<User>() {
+            @Override
+            public void onResponse(final User userResponse) {
+                UserService.getInstance().setCurrentUser(userResponse);
+                GroupService.getInstance().getUsersGroups(userResponse, new RequestHandler<List<Group>>() {
+                    @Override
+                    public void onResponse(List<Group> response) {
+                        if (!response.isEmpty()) {
+                            GroupService.getInstance().setCurrentGroup(response.get(0));
+                            requestHandler.onResponse(userResponse);
+                        } else {
+                            requestHandler.onErrorResponse(new VolleyError("Unable to determine group."));
+                        }
+                    }
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        requestHandler.onErrorResponse(error);
+                    }
+                });
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                requestHandler.onErrorResponse(error);
+            }
+        });
         requestQueue.add(request);
     }
 
@@ -96,6 +124,7 @@ public class UserService {
         currentUser = null;
         CookieManager.getInstance().clearSessionCookie();
         DataStorage.getInstance().remove("CURRENT_USER");
+        GroupService.getInstance().logout();
         mainActivity.startSignInProcess();
     }
 

@@ -212,6 +212,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabLayout.getTabAt(WRITE_PAGE).select();
     }
 
+    public void setTabLayoutHidden(boolean hidden) {
+        tabLayout.setVisibility(hidden ? View.GONE : View.VISIBLE);
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.

@@ -40,6 +40,9 @@ public class ReadFragment extends Fragment implements View.OnClickListener, Main
 
     public void refreshView() {
         GroupService groupService = GroupService.getInstance();
+        if (groupService.getCurrentGroup() == null) {
+            return;
+        }
         groupService.getGroupMessages(groupService.getCurrentGroup(), new RequestHandler<List<Message>>() {
             @Override
             public void onResponse(List<Message> response) {

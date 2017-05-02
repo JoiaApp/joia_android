@@ -16,6 +16,8 @@ import com.joiaapp.joia.dto.request.CreateGroupRequest;
 import com.joiaapp.joia.dto.request.JoinGroupRequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -31,6 +33,7 @@ public class GroupService {
     private RequestQueue requestQueue;
     private MainActivity mainActivity;
     private Group currentGroup;
+    private List<Message> cachedGroupMessages = Collections.emptyList();
 
     private GroupService(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -80,6 +83,12 @@ public class GroupService {
         requestQueue.add(request);
     }
 
+    public void getUsersGroups(User user, RequestHandler<List<Group>> requestHandler) {
+        String url = SERVER_BASE_URL + "/users/" + user.getId() + "/groups.json";
+        GsonCookieRequest request = new GsonListCookieRequest<List<Group>>(Request.Method.GET, url, null, requestHandler);
+        requestQueue.add(request);
+    }
+
     public void getGroupMembers(Group group, RequestHandler<List<User>> requestHandler) {
         String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/members.json";
         GsonCookieRequest request = new GsonListCookieRequest<List<User>>(Request.Method.GET, url, null, requestHandler);
@@ -106,9 +115,21 @@ public class GroupService {
         return BitmapFactory.decodeResource(mainActivity.getApplicationContext().getResources(), R.mipmap.ic_launcher);
     }
 
-    public void getGroupMessages(Group group, RequestHandler<List<Message>> requestHandler) {
+    public void getGroupMessages(Group group, final RequestHandler<List<Message>> requestHandler) {
+        final GroupService me = this;
         String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/responses.json";
-        GsonCookieRequest request = new GsonListCookieRequest<List<Message>>(Request.Method.GET, url, null, requestHandler);
+        GsonCookieRequest request = new GsonListCookieRequest<List<Message>>(Request.Method.GET, url, null, new RequestHandler<List<Message>>() {
+            @Override
+            public void onResponse(List<Message> response) {
+                me.setCachedGroupMessages(response);
+                requestHandler.onResponse(response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                requestHandler.onErrorResponse(error);
+            }
+        });
         requestQueue.add(request);
     }
 
@@ -140,5 +161,25 @@ public class GroupService {
             }
         });
         requestQueue.add(request);
+    }
+
+    private void setCachedGroupMessages(List<Message> cachedGroupMessages) {
+        this.cachedGroupMessages = cachedGroupMessages;
+    }
+
+    public int getNumberOfNewMessagesTodayFromCache() {
+        Date today = new Date();
+        int count = 0;
+        for (Message message : cachedGroupMessages) {
+            if (message.isSameDateAs(today)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void logout() {
+        DataStorage.getInstance().remove("CURRENT_GROUP");
+        cachedGroupMessages = Collections.emptyList();
     }
 }
