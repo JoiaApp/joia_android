@@ -13,7 +13,7 @@ import com.android.volley.VolleyError;
 import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.RequestHandler;
+import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 
@@ -38,12 +38,12 @@ public class GroupFragment extends Fragment implements View.OnClickListener, Mai
         tvGroupName = (TextView) rootView.findViewById(R.id.tvGroupName);
         tvGroupMemberCount = (TextView) rootView.findViewById(R.id.tvGroupMemberCount);
         lvGroupMembers = (ListView) rootView.findViewById(R.id.lvGroupMembers);
-        groupMembersArrayAdapter = new GroupMembersArrayAdapter(getActivity(), new ArrayList<User>());
+        groupMembersArrayAdapter = new GroupMembersArrayAdapter(getActivity(), new ArrayList<User>(), false);
         lvGroupMembers.setAdapter(groupMembersArrayAdapter);
         GroupService groupService = GroupService.getInstance();
         final Group group = groupService.getCurrentGroup();
         if (group != null) {
-            groupService.getGroupMembers(group, new RequestHandler<List<User>>() {
+            groupService.getGroupMembers(group, new ResponseHandler<List<User>>() {
                 @Override
                 public void onResponse(List<User> response) {
                     tvGroupName.setText(group.getName());

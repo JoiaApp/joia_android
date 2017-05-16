@@ -34,6 +34,7 @@ public class GroupService {
     private MainActivity mainActivity;
     private Group currentGroup;
     private List<Message> cachedGroupMessages = Collections.emptyList();
+    private List<User> cachedGroupMembers = Collections.emptyList();
 
     private GroupService(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -62,36 +63,41 @@ public class GroupService {
         return currentGroup;
     }
 
-    public void getGroup(String guid, String password, RequestHandler<Group> requestHandler) {
+    public void getGroup(String guid, String password, ResponseHandler<Group> responseHandler) {
         String url = SERVER_BASE_URL + String.format("/groups/%s.json?password=%s", guid, password);
-        GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.GET, url, null, requestHandler);
+        GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.GET, url, null, responseHandler);
         requestQueue.add(request);
     }
 
-    public void joinGroup(User user, Group group, RequestHandler<Group> requestHandler) {
+    public void joinGroup(User user, Group group, ResponseHandler<Group> responseHandler) {
         JoinGroupRequest joinGroupRequest = new JoinGroupRequest();
         joinGroupRequest.setUserId(user.getId());
         String url = SERVER_BASE_URL + String.format("/groups/%s/join.json", group.getGuid());
-        GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.POST, url, joinGroupRequest, requestHandler);
+        GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.POST, url, joinGroupRequest, responseHandler);
         requestQueue.add(request);
     }
 
-    public void createGroup(Group group, RequestHandler<Group> requestHandler) {
+    public void createGroup(Group group, ResponseHandler<Group> responseHandler) {
         CreateGroupRequest createGroupRequest = new CreateGroupRequest(group);
         String url = SERVER_BASE_URL + "/groups.json";
-        GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.POST, url, createGroupRequest, requestHandler);
+        GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.POST, url, createGroupRequest, responseHandler);
         requestQueue.add(request);
     }
 
-    public void getUsersGroups(User user, RequestHandler<List<Group>> requestHandler) {
+    public void getUsersGroups(User user, ResponseHandler<List<Group>> responseHandler) {
         String url = SERVER_BASE_URL + "/users/" + user.getId() + "/groups.json";
-        GsonCookieRequest request = new GsonListCookieRequest<List<Group>>(Request.Method.GET, url, null, requestHandler);
+        GsonCookieRequest request = new GsonListCookieRequest<List<Group>>(Request.Method.GET, url, null, responseHandler);
         requestQueue.add(request);
     }
 
-    public void getGroupMembers(Group group, RequestHandler<List<User>> requestHandler) {
+    public void getGroupMembers(final Group group, ResponseHandler<List<User>> responseHandler) {
         String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/members.json";
-        GsonCookieRequest request = new GsonListCookieRequest<List<User>>(Request.Method.GET, url, null, requestHandler);
+        GsonCookieRequest request = new GsonListCookieRequest<List<User>>(Request.Method.GET, url, null, new MiddleManResponseHandler<List<User>>(responseHandler) {
+            @Override
+            public void middleManHandler(List<User> response) {
+                group.setMembers(response);
+            }
+        });
         requestQueue.add(request);
     }
 
@@ -115,38 +121,34 @@ public class GroupService {
         return BitmapFactory.decodeResource(mainActivity.getApplicationContext().getResources(), R.mipmap.ic_launcher);
     }
 
-    public void getGroupMessages(Group group, final RequestHandler<List<Message>> requestHandler) {
+    public void getGroupMessages(Group group, final ResponseHandler<List<Message>> responseHandler) {
         final GroupService me = this;
         String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/responses.json";
-        GsonCookieRequest request = new GsonListCookieRequest<List<Message>>(Request.Method.GET, url, null, new RequestHandler<List<Message>>() {
+        GsonCookieRequest request = new GsonListCookieRequest<List<Message>>(Request.Method.GET, url, null, new MiddleManResponseHandler<List<Message>>(responseHandler) {
             @Override
-            public void onResponse(List<Message> response) {
+            public void middleManHandler(List<Message> response) {
                 me.setCachedGroupMessages(response);
-                requestHandler.onResponse(response);
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                requestHandler.onErrorResponse(error);
             }
         });
         requestQueue.add(request);
     }
 
-    public void publishGroupMessages(Group group, List<Message> messages, RequestHandler<List<Message>> requestHandler) {
+
+
+    public void publishGroupMessages(Group group, List<Message> messages, ResponseHandler<List<Message>> responseHandler) {
         String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/responses.json";
-        publishGroupMessage(url, messages, requestHandler, new ArrayList<Message>());
+        publishGroupMessage(url, messages, responseHandler, new ArrayList<Message>());
     }
 
-    private void publishGroupMessage(final String url, final List<Message> messages, final RequestHandler<List<Message>> finalRequestHandler, final List<Message> failedPublishes) {
-        GsonCookieRequest request = new GsonCookieRequest<Message>(Request.Method.POST, url, messages.get(0), new RequestHandler<Message>() {
+    private void publishGroupMessage(final String url, final List<Message> messages, final ResponseHandler<List<Message>> finalResponseHandler, final List<Message> failedPublishes) {
+        GsonCookieRequest request = new GsonCookieRequest<Message>(Request.Method.POST, url, messages.get(0), new ResponseHandler<Message>() {
             @Override
             public void onResponse(Message response) {
                 messages.remove(0);
                 if (messages.isEmpty()) {
-                    finalRequestHandler.onResponse(failedPublishes);
+                    finalResponseHandler.onResponse(failedPublishes);
                 } else {
-                    publishGroupMessage(url, messages, finalRequestHandler, failedPublishes);
+                    publishGroupMessage(url, messages, finalResponseHandler, failedPublishes);
                 }
             }
 
@@ -154,9 +156,9 @@ public class GroupService {
             public void onErrorResponse(VolleyError error) {
                 failedPublishes.add(messages.remove(0));
                 if (messages.isEmpty()) {
-                    finalRequestHandler.onResponse(failedPublishes);
+                    finalResponseHandler.onResponse(failedPublishes);
                 } else {
-                    publishGroupMessage(url, messages, finalRequestHandler, failedPublishes);
+                    publishGroupMessage(url, messages, finalResponseHandler, failedPublishes);
                 }
             }
         });
@@ -165,6 +167,10 @@ public class GroupService {
 
     private void setCachedGroupMessages(List<Message> cachedGroupMessages) {
         this.cachedGroupMessages = cachedGroupMessages;
+    }
+
+    private void setCachedGroupMembers(List<User> cachedGroupMembers) {
+        this.cachedGroupMembers = cachedGroupMembers;
     }
 
     public int getNumberOfNewMessagesTodayFromCache() {

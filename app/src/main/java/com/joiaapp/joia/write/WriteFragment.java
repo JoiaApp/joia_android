@@ -1,6 +1,7 @@
 package com.joiaapp.joia.write;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,7 +25,7 @@ import com.joiaapp.joia.MainActivity;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.PromptService;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.RequestHandler;
+import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.UserService;
 import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.Prompt;
@@ -33,16 +34,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by arnell on 10/28/2016.
  * Copyright 2017 Joia. All rights reserved.
  */
 
 public class WriteFragment extends Fragment implements View.OnClickListener, MainAppFragment {
+    private static final int TAG_FRIENDS_REQUEST_CODE = 9999;
     private View rootView;
     private ViewFlipper viewFlipper;
     private ViewGroup vgIntro;
     private ViewGroup vgForm;
+    private ViewGroup vgTagFriends;
     private ViewGroup vgReview;
     private ViewGroup vgPublishSuccess;
 
@@ -51,6 +56,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     private Spinner spPrompt;
     private EditText etMessageText;
     private TextView tvWriteMessageIndex;
+
+    private Button btnTagFriends;
 
     private MessageReviewArrayAdapter messageReviewArrayAdapter;
     private ListView lvReviewMessages;
@@ -90,7 +97,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         promptArrayAdapter = new ArrayAdapter<>(inflater.getContext(), android.R.layout.simple_spinner_dropdown_item, new ArrayList<Prompt>());
         spPrompt.setAdapter(promptArrayAdapter);
 
-        PromptService.getInstance().getPrompts(new RequestHandler<List<Prompt>>() {
+        PromptService.getInstance().getPrompts(new ResponseHandler<List<Prompt>>() {
             @Override
             public void onResponse(List<Prompt> response) {
                 // TODO: add a "(none)" response
@@ -119,6 +126,9 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         });
         tvWriteMessageIndex = (TextView) rootView.findViewById(R.id.tvWriteMessageIndex);
         tvWriteMessageIndex.setText(String.format("%s of %s Today", 1, TOTAL_MESSAGES));
+
+        btnTagFriends = (Button) rootView.findViewById(R.id.btnTagFriends);
+        btnTagFriends.setOnClickListener(this);
 
         btnGoToJournal = (Button) rootView.findViewById(R.id.btnGoToJournal);
         btnGoToJournal.setOnClickListener(this);
@@ -209,6 +219,24 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         tvWriteMessageIndex.setText(String.format("%s of %s Today", messagesInProgress.size() + 1, TOTAL_MESSAGES));
     }
 
+    public void onTagFriendsButtonTap() {
+//        ViewGroup sceneRoot = (ViewGroup) rootView;
+//        Scene writeScene = Scene.getSceneForLayout(sceneRoot, R.layout.write__form, getContext());
+//        Scene tagFriendsScene = new Scene(sceneRoot, vgIntro);
+//        Transition transition = new Slide(Gravity.TOP);
+//        TransitionManager.beginDelayedTransition(sceneRoot, transition);
+
+        Intent intent = new Intent(getContext(), TagFriendsActivity.class);
+        startActivityForResult(intent, TAG_FRIENDS_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TAG_FRIENDS_REQUEST_CODE && resultCode == RESULT_OK) {
+
+        }
+    }
+
     private void reviewMessages() {
         setDisplayedView(vgReview);
         lvReviewMessages = (ListView) rootView.findViewById(R.id.lvReviewMessages);
@@ -224,7 +252,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
 
     private void publishReviewedMessages() {
         final GroupService groupService = GroupService.getInstance();
-        groupService.publishGroupMessages(groupService.getCurrentGroup(), messageReviewArrayAdapter.getMessages(), new RequestHandler<List<Message>>() {
+        groupService.publishGroupMessages(groupService.getCurrentGroup(), messageReviewArrayAdapter.getMessages(), new ResponseHandler<List<Message>>() {
             @Override
             public void onResponse(List<Message> response) {
                 if (response.isEmpty()) {
@@ -269,6 +297,9 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
                 break;
             case R.id.btnGoToJournal:
                 ((MainActivity)getActivity()).showJournalView();
+                break;
+            case R.id.btnTagFriends:
+                onTagFriendsButtonTap();
                 break;
         }
     }

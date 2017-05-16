@@ -9,10 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
-
-import java.util.List;
 
 /**
  * Created by arnell on 1/9/2017.
@@ -51,7 +48,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
     private void attemptToSignIn(String email, String password) {
         UserService userService = UserService.getInstance();
-        userService.signIn(email, password, new RequestHandler<User>() {
+        userService.signIn(email, password, new ResponseHandler<User>() {
             @Override
             public void onResponse(User user) {
 

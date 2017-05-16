@@ -14,7 +14,7 @@ import java.util.List;
 public class GsonListCookieRequest<T> extends GsonCookieRequest<T> {
     private final Response.Listener<T> mListener;
 
-    public GsonListCookieRequest(int method, String url, Object requestBody, RequestHandler<T> listener) {
+    public GsonListCookieRequest(int method, String url, Object requestBody, ResponseHandler<T> listener) {
         super(method, url, requestBody, listener);
         mListener = listener;
     }

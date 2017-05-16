@@ -7,7 +7,7 @@ import com.android.volley.toolbox.Volley;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.SignInRequest;
-import com.joiaapp.joia.requestdto.CreateUser;
+import com.joiaapp.joia.dto.request.CreateUserRequest;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -74,35 +74,35 @@ public class UserService {
         return instance;
     }
 
-    public void signIn(String email, String password, final RequestHandler<User> requestHandler) {
+    public void signIn(String email, String password, final ResponseHandler<User> responseHandler) {
         SignInRequest signInRequest = new SignInRequest(email, password);
         String url = SERVER_BASE_URL + "/users/login.json";
 
-        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, signInRequest, new RequestHandler<User>() {
+        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, signInRequest, new ResponseHandler<User>() {
             @Override
             public void onResponse(final User userResponse) {
                 UserService.getInstance().setCurrentUser(userResponse);
-                GroupService.getInstance().getUsersGroups(userResponse, new RequestHandler<List<Group>>() {
+                GroupService.getInstance().getUsersGroups(userResponse, new ResponseHandler<List<Group>>() {
                     @Override
                     public void onResponse(List<Group> response) {
                         if (!response.isEmpty()) {
                             GroupService.getInstance().setCurrentGroup(response.get(0));
-                            requestHandler.onResponse(userResponse);
+                            responseHandler.onResponse(userResponse);
                         } else {
-                            requestHandler.onErrorResponse(new VolleyError("Unable to determine group."));
+                            responseHandler.onErrorResponse(new VolleyError("Unable to determine group."));
                         }
                     }
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        requestHandler.onErrorResponse(error);
+                        responseHandler.onErrorResponse(error);
                     }
                 });
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                requestHandler.onErrorResponse(error);
+                responseHandler.onErrorResponse(error);
             }
         });
         requestQueue.add(request);
@@ -128,56 +128,56 @@ public class UserService {
         mainActivity.startSignInProcess();
     }
 
-    public void createUserInGroup(User newUser, final Group group, final RequestHandler<User> requestHandler) {
-        createUser(newUser, new RequestHandler<User>() {
+    public void createUserInGroup(User newUser, final Group group, final ResponseHandler<User> responseHandler) {
+        createUser(newUser, new ResponseHandler<User>() {
             @Override
             public void onResponse(final User response) {
                 UserService.getInstance().setCurrentUser(response);
                 if (group.getId() == null) {
                     // create group
-                    GroupService.getInstance().createGroup(group, new RequestHandler<Group>() {
+                    GroupService.getInstance().createGroup(group, new ResponseHandler<Group>() {
                         @Override
                         public void onResponse(Group createGroupResponse) {
-                            joinGroup(response, createGroupResponse, requestHandler);
+                            joinGroup(response, createGroupResponse, responseHandler);
                         }
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            requestHandler.onErrorResponse(error);
+                            responseHandler.onErrorResponse(error);
                         }
                     });
                 } else {
-                    joinGroup(response, group, requestHandler);
+                    joinGroup(response, group, responseHandler);
                 }
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                requestHandler.onErrorResponse(error);
+                responseHandler.onErrorResponse(error);
             }
         });
     }
 
-    private void joinGroup(final User user, Group group, final RequestHandler<User> requestHandler) {
-        GroupService.getInstance().joinGroup(user, group, new RequestHandler<Group>(){
+    private void joinGroup(final User user, Group group, final ResponseHandler<User> responseHandler) {
+        GroupService.getInstance().joinGroup(user, group, new ResponseHandler<Group>(){
             @Override
             public void onResponse(Group response) {
                 GroupService.getInstance().setCurrentGroup(response);
                 user.getGroups().add(response);
-                requestHandler.onResponse(user);
+                responseHandler.onResponse(user);
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                requestHandler.onErrorResponse(error);
+                responseHandler.onErrorResponse(error);
             }
         });
     }
 
-    private void createUser(User newUser, RequestHandler<User> requestHandler) {
+    private void createUser(User newUser, ResponseHandler<User> responseHandler) {
         String url = SERVER_BASE_URL + "/users.json";
-        CreateUser createUserRequest = new CreateUser(newUser);
-        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, createUserRequest, requestHandler, requestHandler);
+        CreateUserRequest createUserRequest = new CreateUserRequest(newUser);
+        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, createUserRequest, responseHandler, responseHandler);
         requestQueue.add(request);
     }
 }

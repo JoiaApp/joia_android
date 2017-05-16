@@ -15,7 +15,9 @@ import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.dto.User;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by arnell on 12/23/2016.
@@ -26,11 +28,14 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
     private Context context;
     private ViewHolder viewHolder;
     private List<User> members;
+    private boolean selectable;
+    private Set<Integer> selectedMap = new HashSet<>();
 
-    public GroupMembersArrayAdapter(Context context, List<User> members) {
+    public GroupMembersArrayAdapter(Context context, List<User> members, boolean selectable) {
         super(context, -1, members);
         this.context = context;
         this.members = members;
+        this.selectable = selectable;
     }
 
     @Override
@@ -43,6 +48,7 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
             viewHolder.tvMemberName = (TextView) convertView.findViewById(R.id.tvMemberName);
             viewHolder.tvMemberRole = (TextView) convertView.findViewById(R.id.tvMemberRole);
             viewHolder.ivMemberIcon = (ImageView) convertView.findViewById(R.id.ivMemberIcon);
+            viewHolder.ivCheck = (ImageView) convertView.findViewById(R.id.ivCheck);
 
             convertView.setTag(viewHolder);
         } else {
@@ -54,6 +60,11 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
         viewHolder.tvMemberRole.setText(m.getRole());
         Bitmap userImage = GroupService.getInstance().getGroupMemberImageBitmap(m);
         viewHolder.ivMemberIcon.setImageBitmap(userImage);
+        if (selectable && selectedMap.contains(m.getId())) {
+            viewHolder.ivCheck.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivCheck.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -65,9 +76,23 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
         notifyDataSetChanged();
     }
 
+    public void toggleSelected(User member) {
+        if (selectedMap.contains(member.getId())) {
+            selectedMap.remove(member.getId());
+        } else {
+            selectedMap.add(member.getId());
+        }
+        notifyDataSetChanged();
+    }
+
+    public Set<Integer> getSelected() {
+        return selectedMap;
+    }
+
     private static class ViewHolder {
         TextView tvMemberName;
         TextView tvMemberRole;
         ImageView ivMemberIcon;
+        ImageView ivCheck;
     }
 }

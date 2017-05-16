@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_CANCELED) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == INITIAL_ACTIVITY_REQUEST_CODE && resultCode == RESULT_CANCELED) {
             finish();
         }
         if (requestCode == INITIAL_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {

@@ -1,5 +1,8 @@
 package com.joiaapp.joia.dto;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Created by arnell on 3/27/2017.
  * Copyright 2017 Joia. All rights reserved.
@@ -14,6 +17,7 @@ public class Group {
     private String business_id;
     private String created_at;
     private String updated_at;
+    private transient List<User> members = Collections.emptyList();
 
     public Integer getId() {
         return id;
@@ -77,5 +81,13 @@ public class Group {
 
     public void setUpdatedAt(String updated_at) {
         this.updated_at = updated_at;
+    }
+
+    public List<User> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
     }
 }

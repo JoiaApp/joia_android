@@ -33,9 +33,9 @@ public class PromptService {
         return instance;
     }
 
-    public void getPrompts(RequestHandler<List<Prompt>> requestHandler) {
+    public void getPrompts(ResponseHandler<List<Prompt>> responseHandler) {
         String url = SERVER_BASE_URL + "/prompts.json";
-        GsonCookieRequest request = new GsonListCookieRequest<List<Prompt>>(Request.Method.GET, url, null, requestHandler);
+        GsonCookieRequest request = new GsonListCookieRequest<List<Prompt>>(Request.Method.GET, url, null, responseHandler);
         requestQueue.add(request);
     }
 }

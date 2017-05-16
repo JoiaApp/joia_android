@@ -7,6 +7,6 @@ import com.android.volley.Response;
  * Copyright 2017 Joia. All rights reserved.
  */
 
-public abstract class RequestHandler<T> implements Response.Listener<T>, Response.ErrorListener {
+public abstract class ResponseHandler<T> implements Response.Listener<T>, Response.ErrorListener {
 
 }

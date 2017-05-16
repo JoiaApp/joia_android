@@ -32,5 +32,9 @@
             android:name=".InitialActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".write.TagFriendsActivity"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
 </manifest>

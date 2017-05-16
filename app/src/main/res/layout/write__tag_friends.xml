@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvHeader"
+        style="@style/Headline"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center_vertical"
+        android:text="Tag Friends to Message"
+        android:textAlignment="center"/>
+
+    <!-- TODO: reference text color instead of explicit one-->
+    <Button
+        android:id="@+id/btnDoneTagging"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tvHeader"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
+        android:background="#00000000"
+        android:paddingEnd="20dp"
+        android:text="Done"
+        android:textAlignment="textEnd"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textColor="#5fcaed"
+        android:textStyle="normal|bold"/>
+
+    <LinearLayout
+        android:id="@+id/llTagSomebodyElse"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvHeader"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/btn_dialog"
+            android:id="@+id/ivInviteIcon"
+            />
+
+        <com.joiaapp.joia.CustomFontTextView
+            android:id="@+id/textView6"
+            style="@style/Paragraph"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.00"
+            android:gravity="center_vertical"
+            android:text="Tag somebody not in this group"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/llTagSomebodyElse"
+        android:id="@+id/lvTagFriends"/>
+
+</RelativeLayout>

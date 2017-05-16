@@ -32,7 +32,7 @@ public class GsonCookieRequest<T> extends Request<T> {
     private final Listener<T> mListener;
     private final Object mRequestBody;
 
-    public GsonCookieRequest(int method, String url, Object requestBody, RequestHandler<T> listener) {
+    public GsonCookieRequest(int method, String url, Object requestBody, ResponseHandler<T> listener) {
         super(method, url, listener);
         mListener = listener;
         mRequestBody = requestBody;

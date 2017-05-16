@@ -121,7 +121,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         if (emptyTextFieldCheck("Required", etJoinGroupId, etGroupPassword)) {
             return;
         }
-        GroupService.getInstance().getGroup(getFieldText(etJoinGroupId), getFieldText(etGroupPassword), new RequestHandler<Group>() {
+        GroupService.getInstance().getGroup(getFieldText(etJoinGroupId), getFieldText(etGroupPassword), new ResponseHandler<Group>() {
             @Override
             public void onResponse(Group response) {
                 groupToJoin = response;
@@ -146,7 +146,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         newUser.setEmail(getFieldText(etEmail));//TODO: validate email
         newUser.setPassword(getFieldText(etPassword));
         UserService userService = UserService.getInstance();
-        userService.createUserInGroup(newUser, groupToJoin, new RequestHandler<User>() {
+        userService.createUserInGroup(newUser, groupToJoin, new ResponseHandler<User>() {
             @Override
             public void onResponse(User user) {
                 onCreateUserSuccessCallback(user);

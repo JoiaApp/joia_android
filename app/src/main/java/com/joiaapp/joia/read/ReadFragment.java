@@ -12,7 +12,7 @@ import com.android.volley.VolleyError;
 import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.RequestHandler;
+import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Message;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class ReadFragment extends Fragment implements View.OnClickListener, Main
         if (groupService.getCurrentGroup() == null) {
             return;
         }
-        groupService.getGroupMessages(groupService.getCurrentGroup(), new RequestHandler<List<Message>>() {
+        groupService.getGroupMessages(groupService.getCurrentGroup(), new ResponseHandler<List<Message>>() {
             @Override
             public void onResponse(List<Message> response) {
                 messageJournalArrayAdapter.setMessages(response);

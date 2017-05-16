@@ -1,4 +1,4 @@
-package com.joiaapp.joia.requestdto;
+package com.joiaapp.joia.dto.request;
 
 import com.joiaapp.joia.dto.User;
 
@@ -7,10 +7,10 @@ import com.joiaapp.joia.dto.User;
  * Copyright 2017 Joia. All rights reserved.
  */
 
-public class CreateUser {
+public class CreateUserRequest {
     private User user;
 
-    public CreateUser(User newUser) {
+    public CreateUserRequest(User newUser) {
         user = newUser;
     }
 
