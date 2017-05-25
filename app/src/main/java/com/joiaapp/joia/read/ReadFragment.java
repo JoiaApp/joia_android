@@ -9,11 +9,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.GroupService;
+import com.joiaapp.joia.service.GroupService;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Message;
+import com.joiaapp.joia.service.ServiceFactory;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ReadFragment extends Fragment implements View.OnClickListener, Main
     }
 
     public void refreshView() {
-        GroupService groupService = GroupService.getInstance();
+        GroupService groupService = ServiceFactory.getGroupService();
         if (groupService.getCurrentGroup() == null) {
             return;
         }

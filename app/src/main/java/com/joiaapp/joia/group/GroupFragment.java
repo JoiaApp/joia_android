@@ -10,12 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.GroupService;
+import com.joiaapp.joia.service.GroupService;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
+import com.joiaapp.joia.service.ServiceFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class GroupFragment extends Fragment implements View.OnClickListener, Mai
         lvGroupMembers = (ListView) rootView.findViewById(R.id.lvGroupMembers);
         groupMembersArrayAdapter = new GroupMembersArrayAdapter(getActivity(), new ArrayList<User>(), false);
         lvGroupMembers.setAdapter(groupMembersArrayAdapter);
-        GroupService groupService = GroupService.getInstance();
+        GroupService groupService = ServiceFactory.getGroupService();
         final Group group = groupService.getCurrentGroup();
         if (group != null) {
             groupService.getGroupMembers(group, new ResponseHandler<List<User>>() {

@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.service;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,7 +8,12 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
+import com.joiaapp.joia.GsonCookieRequest;
+import com.joiaapp.joia.GsonListCookieRequest;
+import com.joiaapp.joia.MainActivity;
+import com.joiaapp.joia.MiddleManResponseHandler;
+import com.joiaapp.joia.R;
+import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.User;
@@ -28,43 +33,35 @@ import static android.content.ContentValues.TAG;
  */
 
 public class GroupService {
-    private static final String SERVER_BASE_URL = "http://sample-env.qd8vv2zefd.us-west-2.elasticbeanstalk.com";
-    private static GroupService instance;
+    private String serverBaseUrl;
     private RequestQueue requestQueue;
     private MainActivity mainActivity;
+    private DataStorage dataStorage;
     private Group currentGroup;
     private List<Message> cachedGroupMessages = Collections.emptyList();
     private List<User> cachedGroupMembers = Collections.emptyList();
 
-    private GroupService(MainActivity mainActivity) {
+    public GroupService(MainActivity mainActivity, DataStorage dataStorage, RequestQueue requestQueue, String serverBaseUrl) {
         this.mainActivity = mainActivity;
-        requestQueue = Volley.newRequestQueue(this.mainActivity.getApplicationContext());
-    }
-
-    public static void init(MainActivity mainActivity) {
-        if (instance == null) {
-            instance = new GroupService(mainActivity);
-        }
-    }
-
-    public static GroupService getInstance() {
-        return instance;
+        this.dataStorage = dataStorage;
+        this.requestQueue = requestQueue;
+        this.serverBaseUrl = serverBaseUrl;
     }
 
     public void setCurrentGroup(Group currentGroup) {
-        DataStorage.getInstance().set("CURRENT_GROUP", currentGroup);
+        dataStorage.set("CURRENT_GROUP", currentGroup);
         this.currentGroup = currentGroup;
     }
 
     public Group getCurrentGroup() {
         if (currentGroup == null) {
-            currentGroup = DataStorage.getInstance().get("CURRENT_GROUP", Group.class);
+            currentGroup = dataStorage.get("CURRENT_GROUP", Group.class);
         }
         return currentGroup;
     }
 
     public void getGroup(String guid, String password, ResponseHandler<Group> responseHandler) {
-        String url = SERVER_BASE_URL + String.format("/groups/%s.json?password=%s", guid, password);
+        String url = serverBaseUrl + String.format("/groups/%s.json?password=%s", guid, password);
         GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.GET, url, null, responseHandler);
         requestQueue.add(request);
     }
@@ -72,26 +69,26 @@ public class GroupService {
     public void joinGroup(User user, Group group, ResponseHandler<Group> responseHandler) {
         JoinGroupRequest joinGroupRequest = new JoinGroupRequest();
         joinGroupRequest.setUserId(user.getId());
-        String url = SERVER_BASE_URL + String.format("/groups/%s/join.json", group.getGuid());
+        String url = serverBaseUrl + String.format("/groups/%s/join.json", group.getGuid());
         GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.POST, url, joinGroupRequest, responseHandler);
         requestQueue.add(request);
     }
 
     public void createGroup(Group group, ResponseHandler<Group> responseHandler) {
         CreateGroupRequest createGroupRequest = new CreateGroupRequest(group);
-        String url = SERVER_BASE_URL + "/groups.json";
+        String url = serverBaseUrl + "/groups.json";
         GsonCookieRequest request = new GsonCookieRequest<Group>(Request.Method.POST, url, createGroupRequest, responseHandler);
         requestQueue.add(request);
     }
 
     public void getUsersGroups(User user, ResponseHandler<List<Group>> responseHandler) {
-        String url = SERVER_BASE_URL + "/users/" + user.getId() + "/groups.json";
+        String url = serverBaseUrl + "/users/" + user.getId() + "/groups.json";
         GsonCookieRequest request = new GsonListCookieRequest<List<Group>>(Request.Method.GET, url, null, responseHandler);
         requestQueue.add(request);
     }
 
     public void getGroupMembers(final Group group, ResponseHandler<List<User>> responseHandler) {
-        String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/members.json";
+        String url = serverBaseUrl + "/groups/" + group.getGuid() + "/members.json";
         GsonCookieRequest request = new GsonListCookieRequest<List<User>>(Request.Method.GET, url, null, new MiddleManResponseHandler<List<User>>(responseHandler) {
             @Override
             public void middleManHandler(List<User> response) {
@@ -123,7 +120,7 @@ public class GroupService {
 
     public void getGroupMessages(Group group, final ResponseHandler<List<Message>> responseHandler) {
         final GroupService me = this;
-        String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/responses.json";
+        String url = serverBaseUrl + "/groups/" + group.getGuid() + "/responses.json";
         GsonCookieRequest request = new GsonListCookieRequest<List<Message>>(Request.Method.GET, url, null, new MiddleManResponseHandler<List<Message>>(responseHandler) {
             @Override
             public void middleManHandler(List<Message> response) {
@@ -136,7 +133,7 @@ public class GroupService {
 
 
     public void publishGroupMessages(Group group, List<Message> messages, ResponseHandler<List<Message>> responseHandler) {
-        String url = SERVER_BASE_URL + "/groups/" + group.getGuid() + "/responses.json";
+        String url = serverBaseUrl + "/groups/" + group.getGuid() + "/responses.json";
         publishGroupMessage(url, messages, responseHandler, new ArrayList<Message>());
     }
 
@@ -185,7 +182,7 @@ public class GroupService {
     }
 
     public void logout() {
-        DataStorage.getInstance().remove("CURRENT_GROUP");
+        dataStorage.remove("CURRENT_GROUP");
         cachedGroupMessages = Collections.emptyList();
     }
 }

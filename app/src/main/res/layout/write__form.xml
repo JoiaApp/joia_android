@@ -8,12 +8,12 @@
 
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvWriteMessageIndex"
+        style="@style/Label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingEnd="7dp"
         android:paddingStart="7dp"
-        android:text="1 of 3 Today"
-        style="@style/Label"/>
+        android:text="1 of 3 Today"/>
 
     <Spinner
         android:id="@+id/spPrompt"
@@ -24,7 +24,9 @@
         android:id="@+id/etMessageText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="7dp"
         android:layout_weight="1"
+        android:background="@android:color/transparent"
         android:ems="10"
         android:gravity="top"
         android:hint="enter positive experience here"
@@ -40,7 +42,17 @@
             android:id="@+id/btnTagFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tag Friends"/>
+            android:background="@drawable/button_tagfriends"
+            android:drawableStart="@mipmap/ic_user_icon_smaller"
+            android:paddingBottom="8dp"
+            android:paddingEnd="24dp"
+            android:paddingStart="18dp"
+            android:paddingTop="8dp"
+            android:text="Tag Friends"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 

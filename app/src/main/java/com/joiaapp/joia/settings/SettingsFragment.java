@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.UserService;
+import com.joiaapp.joia.service.ServiceFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +41,7 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         String clickedItem = (String) adapter.getItemAtPosition(position);
         if ("Logout".equals(clickedItem)) {
-            UserService.getInstance().logout();
+            ServiceFactory.getUserService().logout();
         }
     }
 

@@ -13,6 +13,8 @@ import android.widget.ViewFlipper;
 import com.android.volley.VolleyError;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
+import com.joiaapp.joia.service.ServiceFactory;
+import com.joiaapp.joia.service.UserService;
 
 import static com.joiaapp.joia.FieldHelper.emptyTextFieldCheck;
 import static com.joiaapp.joia.FieldHelper.getFieldText;
@@ -121,7 +123,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         if (emptyTextFieldCheck("Required", etJoinGroupId, etGroupPassword)) {
             return;
         }
-        GroupService.getInstance().getGroup(getFieldText(etJoinGroupId), getFieldText(etGroupPassword), new ResponseHandler<Group>() {
+        ServiceFactory.getGroupService().getGroup(getFieldText(etJoinGroupId), getFieldText(etGroupPassword), new ResponseHandler<Group>() {
             @Override
             public void onResponse(Group response) {
                 groupToJoin = response;
@@ -145,7 +147,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         newUser.setName(getFieldText(etName));
         newUser.setEmail(getFieldText(etEmail));//TODO: validate email
         newUser.setPassword(getFieldText(etPassword));
-        UserService userService = UserService.getInstance();
+        UserService userService = ServiceFactory.getUserService();
         userService.createUserInGroup(newUser, groupToJoin, new ResponseHandler<User>() {
             @Override
             public void onResponse(User user) {
@@ -156,8 +158,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             public void onErrorResponse(VolleyError error) {
                 //TODO: recover
                 CharSequence text;
-                User user = UserService.getInstance().getCurrentUser();
-                Group group = GroupService.getInstance().getCurrentGroup();
+                User user = ServiceFactory.getUserService().getCurrentUser();
+                Group group = ServiceFactory.getGroupService().getCurrentGroup();
                 if (user == null) {
                     text = "Unable to create user with the provided credentials!";
                 } else if (group == null) {

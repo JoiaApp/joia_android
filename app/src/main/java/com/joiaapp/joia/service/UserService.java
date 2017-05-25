@@ -1,13 +1,15 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.service;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
+import com.joiaapp.joia.GsonCookieRequest;
+import com.joiaapp.joia.MainActivity;
+import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
-import com.joiaapp.joia.dto.request.SignInRequest;
 import com.joiaapp.joia.dto.request.CreateUserRequest;
+import com.joiaapp.joia.dto.request.SignInRequest;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -28,65 +30,62 @@ import javax.net.ssl.X509TrustManager;
  */
 
 public class UserService {
-    private static final String SERVER_BASE_URL = "http://sample-env.qd8vv2zefd.us-west-2.elasticbeanstalk.com";
-    private static UserService instance;
+    private String serverBaseUrl;
+    private UserService me;
     private RequestQueue requestQueue;
     private User currentUser;
     private MainActivity mainActivity;
+    private GroupService groupService;
+    private DataStorage dataStorage;
+    private CookieManager cookieManager;
 
-    private UserService(MainActivity mainActivity) {
+    public UserService(MainActivity mainActivity, RequestQueue requestQueue, GroupService groupService, DataStorage dataStorage, CookieManager cookieManager, String serverBaseUrl) {
+        me = this;
         this.mainActivity = mainActivity;
-        requestQueue = Volley.newRequestQueue(this.mainActivity.getApplicationContext());
-    }
+        this.requestQueue = requestQueue;
+        this.groupService = groupService;
+        this.dataStorage = dataStorage;
+        this.cookieManager = cookieManager;
+        this.serverBaseUrl = serverBaseUrl;
+        try {
+            SSLContext ctx = SSLContext.getInstance("TLS");
+            ctx.init(null, new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
-    public static void init(MainActivity context) {
-        if (instance == null) {
-            instance = new UserService(context);
-
-            try {
-                SSLContext ctx = SSLContext.getInstance("TLS");
-                ctx.init(null, new TrustManager[] {
-                        new X509TrustManager() {
-                            @Override
-                            public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                            }
-                            @Override
-                            public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-
-                            }
-                            public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
                         }
-                }, null);
-                HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
-                HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                });
-            } catch (NoSuchAlgorithmException | KeyManagementException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+                        @Override
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
-    public static UserService getInstance() {
-        return instance;
+                        }
+                        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                    }
+            }, null);
+            HttpsURLConnection.setDefaultSSLSocketFactory(ctx.getSocketFactory());
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+        }
     }
 
     public void signIn(String email, String password, final ResponseHandler<User> responseHandler) {
         SignInRequest signInRequest = new SignInRequest(email, password);
-        String url = SERVER_BASE_URL + "/users/login.json";
+        String url = serverBaseUrl + "/users/login.json";
 
         GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, signInRequest, new ResponseHandler<User>() {
             @Override
             public void onResponse(final User userResponse) {
-                UserService.getInstance().setCurrentUser(userResponse);
-                GroupService.getInstance().getUsersGroups(userResponse, new ResponseHandler<List<Group>>() {
+                me.setCurrentUser(userResponse);
+                groupService.getUsersGroups(userResponse, new ResponseHandler<List<Group>>() {
                     @Override
                     public void onResponse(List<Group> response) {
                         if (!response.isEmpty()) {
-                            GroupService.getInstance().setCurrentGroup(response.get(0));
+                            groupService.setCurrentGroup(response.get(0));
                             responseHandler.onResponse(userResponse);
                         } else {
                             responseHandler.onErrorResponse(new VolleyError("Unable to determine group."));
@@ -109,22 +108,22 @@ public class UserService {
     }
 
     public void setCurrentUser(User currentUser) {
-        DataStorage.getInstance().set("CURRENT_USER", currentUser);
+        dataStorage.set("CURRENT_USER", currentUser);
         this.currentUser = currentUser;
     }
 
     public User getCurrentUser() {
         if (currentUser == null) {
-            currentUser = DataStorage.getInstance().get("CURRENT_USER", User.class);
+            currentUser = dataStorage.get("CURRENT_USER", User.class);
         }
         return currentUser;
     }
 
     public void logout() {
         currentUser = null;
-        CookieManager.getInstance().clearSessionCookie();
-        DataStorage.getInstance().remove("CURRENT_USER");
-        GroupService.getInstance().logout();
+        cookieManager.clearSessionCookie();
+        dataStorage.remove("CURRENT_USER");
+        groupService.logout();
         mainActivity.startSignInProcess();
     }
 
@@ -132,10 +131,10 @@ public class UserService {
         createUser(newUser, new ResponseHandler<User>() {
             @Override
             public void onResponse(final User response) {
-                UserService.getInstance().setCurrentUser(response);
+                me.setCurrentUser(response);
                 if (group.getId() == null) {
                     // create group
-                    GroupService.getInstance().createGroup(group, new ResponseHandler<Group>() {
+                    groupService.createGroup(group, new ResponseHandler<Group>() {
                         @Override
                         public void onResponse(Group createGroupResponse) {
                             joinGroup(response, createGroupResponse, responseHandler);
@@ -159,10 +158,10 @@ public class UserService {
     }
 
     private void joinGroup(final User user, Group group, final ResponseHandler<User> responseHandler) {
-        GroupService.getInstance().joinGroup(user, group, new ResponseHandler<Group>(){
+        groupService.joinGroup(user, group, new ResponseHandler<Group>(){
             @Override
             public void onResponse(Group response) {
-                GroupService.getInstance().setCurrentGroup(response);
+                groupService.setCurrentGroup(response);
                 user.getGroups().add(response);
                 responseHandler.onResponse(user);
             }
@@ -175,7 +174,7 @@ public class UserService {
     }
 
     private void createUser(User newUser, ResponseHandler<User> responseHandler) {
-        String url = SERVER_BASE_URL + "/users.json";
+        String url = serverBaseUrl + "/users.json";
         CreateUserRequest createUserRequest = new CreateUserRequest(newUser);
         GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, createUserRequest, responseHandler, responseHandler);
         requestQueue.add(request);

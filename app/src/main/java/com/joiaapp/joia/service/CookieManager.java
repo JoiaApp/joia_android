@@ -1,7 +1,9 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.service;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.joiaapp.joia.MainActivity;
 
 import java.util.Map;
 
@@ -14,18 +16,10 @@ public class CookieManager {
     private static final String SET_COOKIE_KEY = "Set-Cookie";
     private static final String COOKIE_KEY = "Cookie";
     private static final String SESSION_COOKIE = "_srv_session";
-    private static CookieManager instance;
     private SharedPreferences preferences;
 
-    private CookieManager() {}
-
-    public static void init(MainActivity mainActivity) {
-        instance = new CookieManager();
-        instance.preferences = PreferenceManager.getDefaultSharedPreferences(mainActivity.getApplicationContext());
-    }
-
-    public static CookieManager getInstance() {
-        return instance;
+    public CookieManager(MainActivity mainActivity) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(mainActivity.getApplicationContext());
     }
 
     public void extractSessionCookie(Map<String, String> headers) {

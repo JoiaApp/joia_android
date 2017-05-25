@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.joiaapp.joia.group.GroupFragment;
 import com.joiaapp.joia.read.ReadFragment;
+import com.joiaapp.joia.service.ServiceFactory;
 import com.joiaapp.joia.settings.SettingsFragment;
 import com.joiaapp.joia.write.WriteFragment;
 
@@ -27,7 +28,6 @@ import com.joiaapp.joia.write.WriteFragment;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
-//TODO: make everything use webservices instead of database
 //TODO: update all the styling
 //TODO: implement mentions
 //TODO: implement group page
@@ -71,16 +71,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        DatabaseHelper dbHelper = DatabaseHelper.getInstance(this);
-//        dbHelper.resetDatabase();
+        ServiceFactory.init(this);
 
-        DataStorage.init(this);
-        CookieManager.init(this);
-        UserService.init(this);
-        GroupService.init(this);
-        PromptService.init(this);
-
-        if (UserService.getInstance().getCurrentUser() == null) {
+        if (ServiceFactory.getUserService().getCurrentUser() == null) {
             startSignInProcess();
         }
 

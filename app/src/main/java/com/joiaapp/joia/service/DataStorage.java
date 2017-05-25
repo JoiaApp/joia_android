@@ -1,7 +1,10 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.service;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.joiaapp.joia.GsonUtil;
+import com.joiaapp.joia.MainActivity;
 
 /**
  * Created by arnell on 3/20/2017.
@@ -9,24 +12,11 @@ import android.preference.PreferenceManager;
  */
 
 public class DataStorage {
-    private static DataStorage instance;
     private SharedPreferences preferences;
 
 
-    private DataStorage(MainActivity mainActivity) {
+    public DataStorage(MainActivity mainActivity) {
         this.preferences = PreferenceManager.getDefaultSharedPreferences(mainActivity.getApplicationContext());
-    }
-
-    public static void init(MainActivity mainActivity)
-    {
-        if (instance == null) {
-            instance = new DataStorage(mainActivity);
-        }
-    }
-
-    public static DataStorage getInstance()
-    {
-        return instance;
     }
 
     public <T> T get(String id, Class<T> type) {

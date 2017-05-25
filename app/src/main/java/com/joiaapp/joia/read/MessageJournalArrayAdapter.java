@@ -11,9 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.dto.Message;
+import com.joiaapp.joia.service.ServiceFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
                 viewHolder.tvMessageMentions.setVisibility(View.VISIBLE);
                 viewHolder.tvMessageMentions.setText(m.getMentionsStr());
             }
-            Bitmap userImage = GroupService.getInstance().getGroupMemberImageBitmap(m.getUser());
+            Bitmap userImage = ServiceFactory.getGroupService().getGroupMemberImageBitmap(m.getUser());
             viewHolder.ivMessageAuthorIcon.setImageBitmap(userImage);
         } else {
             Date today = new Date();

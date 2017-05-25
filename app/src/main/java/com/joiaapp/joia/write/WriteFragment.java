@@ -20,15 +20,14 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.MainActivity;
 import com.joiaapp.joia.MainAppFragment;
-import com.joiaapp.joia.PromptService;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.ResponseHandler;
-import com.joiaapp.joia.UserService;
 import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.Prompt;
+import com.joiaapp.joia.service.GroupService;
+import com.joiaapp.joia.service.ServiceFactory;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -97,7 +96,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         promptArrayAdapter = new ArrayAdapter<>(inflater.getContext(), android.R.layout.simple_spinner_dropdown_item, new ArrayList<Prompt>());
         spPrompt.setAdapter(promptArrayAdapter);
 
-        PromptService.getInstance().getPrompts(new ResponseHandler<List<Prompt>>() {
+        ServiceFactory.getPromptService().getPrompts(new ResponseHandler<List<Prompt>>() {
             @Override
             public void onResponse(List<Prompt> response) {
                 // TODO: add a "(none)" response
@@ -159,7 +158,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
             return null;
         } else {
             Message message = new Message();
-            message.setUserId(UserService.getInstance().getCurrentUser().getId());
+            message.setUserId(ServiceFactory.getUserService().getCurrentUser().getId());
             message.setCreatedAt(new Date());
             message.setText(selectedPrompt, messageText);
             return message;
@@ -251,7 +250,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     }
 
     private void publishReviewedMessages() {
-        final GroupService groupService = GroupService.getInstance();
+        final GroupService groupService = ServiceFactory.getGroupService();
         groupService.publishGroupMessages(groupService.getCurrentGroup(), messageReviewArrayAdapter.getMessages(), new ResponseHandler<List<Message>>() {
             @Override
             public void onResponse(List<Message> response) {

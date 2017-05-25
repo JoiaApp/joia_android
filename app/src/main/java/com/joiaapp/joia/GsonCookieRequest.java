@@ -9,6 +9,7 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.joiaapp.joia.service.ServiceFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.ParameterizedType;
@@ -46,7 +47,7 @@ public class GsonCookieRequest<T> extends Request<T> {
 
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
-        CookieManager.getInstance().extractSessionCookie(response.headers);
+        ServiceFactory.getCookieManager().extractSessionCookie(response.headers);
 
         try {
             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
@@ -88,7 +89,7 @@ public class GsonCookieRequest<T> extends Request<T> {
             headers = new HashMap<>();
         }
 
-        CookieManager.getInstance().addSessionCookie(headers);
+        ServiceFactory.getCookieManager().addSessionCookie(headers);
 
         return headers;
     }

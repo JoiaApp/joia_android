@@ -11,9 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.dto.User;
+import com.joiaapp.joia.service.ServiceFactory;
 
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +58,7 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
         User m = members.get(position);
         viewHolder.tvMemberName.setText(m.getName());
         viewHolder.tvMemberRole.setText(m.getRole());
-        Bitmap userImage = GroupService.getInstance().getGroupMemberImageBitmap(m);
+        Bitmap userImage = ServiceFactory.getGroupService().getGroupMemberImageBitmap(m);
         viewHolder.ivMemberIcon.setImageBitmap(userImage);
         if (selectable && selectedMap.contains(m.getId())) {
             viewHolder.ivCheck.setVisibility(View.VISIBLE);

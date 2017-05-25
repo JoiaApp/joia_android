@@ -10,13 +10,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.GroupService;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.ResponseHandler;
-import com.joiaapp.joia.UserService;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.group.GroupMembersArrayAdapter;
+import com.joiaapp.joia.service.GroupService;
+import com.joiaapp.joia.service.ServiceFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class TagFriendsActivity extends Activity implements View.OnClickListener
 
         btnDoneTagging.setOnClickListener(this);
 
-        GroupService groupService = GroupService.getInstance();
+        GroupService groupService = ServiceFactory.getGroupService();
         final Group group = groupService.getCurrentGroup();
         if (!group.getMembers().isEmpty()) {
             setArrayAdapterMembers(group.getMembers());
@@ -66,7 +66,7 @@ public class TagFriendsActivity extends Activity implements View.OnClickListener
 
     private void setArrayAdapterMembers(List<User> members) {
         List<User> selectableUsers = new ArrayList<>();
-        Integer currentUserId = UserService.getInstance().getCurrentUser().getId();
+        Integer currentUserId = ServiceFactory.getUserService().getCurrentUser().getId();
         for (User member : members) {
             if (!member.getId().equals(currentUserId)) {
                 selectableUsers.add(member);
