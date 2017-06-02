@@ -71,7 +71,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     ArrayAdapter<Prompt> promptArrayAdapter;
 
     //Nav Settings
-    private String navTitle = "Write a Message";
     private boolean navBackButtonVisible = true;
     private boolean navNextButtonVisible = true;
 
@@ -305,7 +304,11 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
 
     @Override
     public String getNavBarTitle() {
-        return navTitle;
+        if (viewFlipper.getDisplayedChild() == viewFlipper.indexOfChild(vgReview)) {
+            return "Message Summary";
+        } else {
+            return "Write a Message";
+        }
     }
 
     @Override

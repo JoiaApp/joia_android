@@ -1,6 +1,9 @@
 package com.joiaapp.joia;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -101,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabLayout.getTabAt(READ_PAGE).setIcon(R.drawable.ic_journal);
         tabLayout.getTabAt(GROUP_PAGE).setIcon(R.drawable.ic_group);
         tabLayout.getTabAt(SETTINGS_PAGE).setIcon(R.drawable.ic_settings);
+        setTabIconColors(0);
     }
 
     public void startSignInProcess() {
@@ -169,11 +173,27 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageSelected(int position) {
         //System.out.println("onPageSelected: " + position);
+        setTabIconColors(position);
         updateNavigationBar(position);
         switch (position) {
             case READ_PAGE:
                 onReadPageSelected();
                 break;
+        }
+    }
+
+    private void setTabIconColors(int activePosition) {
+        int activeColor;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            activeColor = getResources().getColor(R.color.colorPrimary, null);
+        } else {
+            activeColor = getResources().getColor(R.color.colorPrimary);
+        }
+        tabLayout.getTabAt(activePosition).getIcon().setColorFilter(activeColor, PorterDuff.Mode.SRC_IN);
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+            if (i != activePosition) {
+                tabLayout.getTabAt(i).getIcon().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+            }
         }
     }
 
