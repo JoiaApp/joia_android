@@ -2,27 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:gravity="center_horizontal"
               android:orientation="vertical">
 
-    <include
-        android:id="@+id/opalHeader"
-        layout="@layout/opal_header"/>
+    <include layout="@layout/opal_header"/>
 
     <com.joiaapp.joia.CustomFontTextView
         style="@style/RegisterExplanation"
         android:text="Welcome to Joia, let's begin with your group..."/>
 
     <Button
-        android:text="Join a Group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/btnJoinAGroup"
-        android:textAllCaps="false"/>
+        style="@style/OrangeButton"
+        android:layout_marginTop="70dp"
+        android:text="Join a Group"
+        android:textAlignment="center"/>
+
     <Button
-        android:text="Create a Group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/btnCreateAGroup"
-        android:textAllCaps="false"/>
+        style="@style/OrangeButton"
+        android:layout_marginTop="20dp"
+        android:text="Create a Group"
+        android:textAlignment="center"/>
 
 </LinearLayout>

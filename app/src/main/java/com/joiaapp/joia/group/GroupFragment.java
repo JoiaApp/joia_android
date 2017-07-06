@@ -62,6 +62,28 @@ public class GroupFragment extends Fragment implements View.OnClickListener, Mai
         return rootView;
     }
 
+    public void refreshView() {
+        GroupService groupService = ServiceFactory.getGroupService();
+        final Group currentGroup = groupService.getCurrentGroup();
+        if (groupService.getCurrentGroup() == null) {
+            return;
+        }
+        groupService.getGroupMembers(currentGroup, new ResponseHandler<List<User>>() {
+            @Override
+            public void onResponse(List<User> response) {
+                tvGroupName.setText(currentGroup.getName());
+                tvGroupMemberCount.setText(String.format("%s Members", response.size()));
+                groupMembersArrayAdapter.setMembers(response);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Failed to load group members.", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
 

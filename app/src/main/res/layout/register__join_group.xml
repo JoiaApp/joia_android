@@ -1,51 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlRegisterSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true">
+
     <include
-        android:id="@+id/opalHeader"
+        android:id="@+id/ivOpalHeader"
         layout="@layout/opal_header"/>
 
     <com.joiaapp.joia.CustomFontTextView
         style="@style/RegisterExplanation"
+
+        android:layout_below="@+id/ivOpalHeader"
         android:text="Great! Next, let's get your group set up..."/>
 
     <com.joiaapp.joia.CustomFontTextView
-        android:text="Group ID"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/tvGroupID"
-        style="@style/FieldLabel"/>
+        style="@style/FieldLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/etGroupId"
+        android:layout_alignStart="@+id/etGroupId"
+        android:text="Group ID"/>
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
         android:id="@+id/etGroupId"
-        android:inputType="text"
-        android:hint="Enter Group ID"/>
+        android:layout_width="352dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvGroupPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="Enter Group ID"
+        android:inputType="text"/>
 
     <com.joiaapp.joia.CustomFontTextView
-        android:text="Group Password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/tvGroupPassword"
-        style="@style/FieldLabel"/>
+        style="@style/FieldLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/etGroupPassword"
+        android:layout_alignStart="@+id/etGroupPassword"
+        android:text="Group Password"/>
 
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:ems="10"
         android:id="@+id/etGroupPassword"
-        android:hint="Enter Password"/>
+        android:layout_width="352dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSubmitJoinGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="47dp"
+        android:ems="10"
+        android:hint="Enter Password"
+        android:inputType="text"/>
 
     <Button
-        android:text="Submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/btnSubmitJoinGroup"
-        android:textAllCaps="false"/>
+        style="@style/OrangeButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="34dp"
+        android:layout_marginTop="20dp"
+        android:text="Submit"/>
 
-</LinearLayout>
+</RelativeLayout>

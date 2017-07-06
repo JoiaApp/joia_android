@@ -1,46 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlRegisterSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true">
 
-    <include layout="@layout/opal_header"/>
+    <include
+        android:id="@+id/include"
+        layout="@layout/opal_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
 
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvEmail"
+        style="@style/FieldLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Email"
-        style="@style/FieldLabel"/>
+        android:layout_above="@+id/etEmail"
+        android:layout_alignStart="@+id/etEmail"
+        android:layout_centerVertical="true"
+        android:text="Email"/>
 
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="fill_parent"
+        android:layout_width="352dp"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/tvPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textEmailAddress"/>
 
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvPassword"
+        style="@style/FieldLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Password"
-        style="@style/FieldLabel"/>
+        android:layout_above="@+id/etPassword"
+        android:layout_alignStart="@+id/etPassword"
+        android:text="Password"/>
+
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="fill_parent"
+        android:layout_width="352dp"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSubmitSignIn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="47dp"
         android:ems="10"
         android:inputType="textPassword"/>
 
-
     <Button
         android:id="@+id/btnSubmitSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/OrangeButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="34dp"
+        android:layout_marginTop="20dp"
         android:text="Submit"/>
 
-</LinearLayout>
+</RelativeLayout>

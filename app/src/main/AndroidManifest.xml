@@ -22,6 +22,7 @@
         </activity>
         <activity
             android:name=".SignInActivity"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
         </activity>
         <activity

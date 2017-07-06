@@ -2,10 +2,14 @@ package com.joiaapp.joia;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -23,6 +27,7 @@ public class SignInActivity extends Activity implements View.OnClickListener {
     private Button btnSubmit;
     private EditText etEmail;
     private EditText etPassword;
+    private ImageView ivOpalHeader;
 
     private static final int REGISTER_REQUEST_CODE = 12;
 
@@ -35,6 +40,21 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         btnSubmit.setOnClickListener(this);
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        ivOpalHeader = (ImageView) findViewById(R.id.ivOpalHeader);
+
+        final RelativeLayout rlRegisterSignIn = (RelativeLayout) findViewById(R.id.rlRegisterSignIn);
+
+        // TODO: put this somewhere else
+        rlRegisterSignIn.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Rect r = new Rect();
+                rlRegisterSignIn.getWindowVisibleDisplayFrame(r);
+
+                int heightDiff = rlRegisterSignIn.getRootView().getHeight() - (r.bottom - r.top);
+                ivOpalHeader.setVisibility(heightDiff > 100 ? View.GONE : View.VISIBLE);
+            }
+        });
     }
 
     @Override

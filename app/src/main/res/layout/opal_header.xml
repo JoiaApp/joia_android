@@ -3,21 +3,26 @@
               android:id="@+id/opalHeader"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:layout_alignParentTop="true"
               android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/ivOpalHeader"
         android:layout_width="fill_parent"
-        android:layout_height="140dp"
-        android:background="#a9dff0"
-        android:src="@mipmap/opal_eyes_open"
-        android:adjustViewBounds="true"/>
+        android:layout_height="130dp"
+        android:adjustViewBounds="true"
+        android:background="@color/registerHeader"
+        android:paddingTop="10dp"
+        android:src="@mipmap/opal_wink"/>
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/ivJoiaText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#a9dff0"
-        android:src="@mipmap/joia_logotype_navy"/>
+        android:layout_height="60dp"
+        android:background="@color/registerHeader"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:src="@drawable/joia_logotype_svg"
+        android:tint="@color/white"/>
 
 </LinearLayout>

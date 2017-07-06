@@ -32,6 +32,8 @@ import com.joiaapp.joia.write.WriteFragment;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
 //TODO: update all the styling
+//TODO: make the back button work during registration / sign in
+//TODO: make the opal header hide when focused on registration fields
 //TODO: implement mentions
 //TODO: implement group page
 //TODO: implement settings page
@@ -179,6 +181,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             case READ_PAGE:
                 onReadPageSelected();
                 break;
+            case GROUP_PAGE:
+                onGroupPageSelected();
+                break;
         }
     }
 
@@ -199,6 +204,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private void onReadPageSelected() {
         readFragment.refreshView();
+    }
+
+    private void onGroupPageSelected() {
+        groupFragment.refreshView();
     }
 
     @Override
