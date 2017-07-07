@@ -90,7 +90,7 @@ public class MessageJournalArrayAdapter extends ArrayAdapter<Message> {
         Message m = messages.get(position);
         if (rowType == TYPE_ITEM) {
             viewHolder.tvMessageAuthor.setText(String.valueOf(m.getUser().getName()));
-            viewHolder.tvMessageText.setText(m.getText());
+            viewHolder.tvMessageText.setText(m.getTextWithPrompt());
             if (m.getMentions().isEmpty()) {
                 viewHolder.tvMessageMentions.setVisibility(View.GONE);
             } else {

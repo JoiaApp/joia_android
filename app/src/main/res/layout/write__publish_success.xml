@@ -7,28 +7,25 @@
 
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvPublishSuccessTitle"
+        style="@style/Title2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPublishSuccess"
         android:layout_centerHorizontal="true"
-        android:text="Great Job"
-        style="@style/Title2"/>
+        android:text="Great Job"/>
 
     <Button
         android:id="@+id/btnGoToJournal"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:layout_below="@+id/tvPublishSuccessMessage"
+        style="@style/OrangeButton"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp"
-        android:background="@drawable/button_background"
-        android:text="Go to Journal"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="12sp"/>
+        android:layout_marginBottom="34dp"
+        android:layout_marginTop="20dp"
+        android:text="Go to Journal"/>
 
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvPublishSuccessMessage"
+        style="@style/Paragraph"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/ivPublishSuccess"
@@ -36,8 +33,7 @@
         android:layout_below="@+id/tvPublishSuccessTitle"
         android:layout_marginTop="15dp"
         android:text="Your messages have been published to XYZ. There have been ## new messages posted today in your group journal."
-        android:textAlignment="center"
-        style="@style/Paragraph"/>
+        android:textAlignment="center"/>
 
     <ImageView
         android:id="@+id/ivPublishSuccess"

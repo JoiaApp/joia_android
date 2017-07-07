@@ -17,15 +17,11 @@
 
     <Button
         android:id="@+id/btnPublishToGroup"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
+        style="@style/OrangeButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="bottom|center"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/button_background"
-        android:text="Publish to Group"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="12sp"/>
+        android:layout_marginBottom="34dp"
+        android:layout_marginTop="20dp"
+        android:text="Publish to Group"/>
+
 </RelativeLayout>

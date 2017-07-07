@@ -16,7 +16,6 @@ public class Message {
     private Integer prompt_id;
     private transient Prompt promptObj;
     private String text;
-    private transient String userText;
     private int group_id;
     private int user_id;
     private User user;
@@ -54,14 +53,13 @@ public class Message {
         return text;
     }
 
-    public String getUserText() {
-        return userText;
-    }
-
     public void setText(Prompt prompt, String userText) {
         setPromptObj(prompt);
-        this.userText = userText;
-        this.text = prompt + " " + userText;
+        this.text = userText;
+    }
+
+    public String getTextWithPrompt() {
+        return prompt + " " + text;
     }
 
     public int getUserId() {
@@ -118,7 +116,7 @@ public class Message {
     }
 
     public String toString() {
-        return userText + "\n-" + getMentionsStr();
+        return getTextWithPrompt() + "\n-" + getMentionsStr();
     }
 
     public String getMentionsStr() {

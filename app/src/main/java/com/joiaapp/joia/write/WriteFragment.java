@@ -210,7 +210,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     private void populateWriteView(Message message) {
         int promptIdx = promptArrayAdapter.getPosition(message.getPromptObj());
         spPrompt.setSelection(promptIdx);
-        etMessageText.setText(message.getUserText());
+        etMessageText.setText(message.getText());
     }
 
     private void updateMessageIndexLabel() {
