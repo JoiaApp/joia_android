@@ -182,6 +182,7 @@ public class GroupService {
     }
 
     public void logout() {
+        currentGroup = null;
         dataStorage.remove("CURRENT_GROUP");
         cachedGroupMessages = Collections.emptyList();
     }

@@ -111,6 +111,28 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        switch (vfRegister.getCurrentView().getId()) {
+            case R.id.loChooseGroup:
+                super.onBackPressed();
+                break;
+            case R.id.loJoinGroup:
+                setDisplayedView(vgChooseGroup);
+                break;
+            case R.id.loCreateUser:
+                if (groupToJoin.getId() == null) {
+                    setDisplayedView(vgCreateGroup);
+                } else {
+                    setDisplayedView(vgJoinGroup);
+                }
+                break;
+            case R.id.loCreateGroup:
+                setDisplayedView(vgChooseGroup);
+                break;
+        }
+    }
+
     private void onJoinAGroup() {
         setDisplayedView(vgJoinGroup);
     }
@@ -172,6 +194,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
             }
         });
     }
+
     private void onCreateUserSuccessCallback(User user) {
         Intent iData = new Intent();
         setResult(Activity.RESULT_OK, iData);
