@@ -1,5 +1,6 @@
 package com.joiaapp.joia.dto;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Copyright 2017 Joia. All rights reserved.
  */
 
-public class User {
+public class User implements Serializable{
     private Integer id;
     private String email;
     private String name;
@@ -68,5 +69,19 @@ public class User {
 
     public List<Group> getGroups() {
         return groups;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof User)) {
+            return false;
+        }
+        User other = (User) o;
+        if (id != null) {
+            return id.equals(other.getId());
+        } else if (email != null) {
+            return email.equals(other.getEmail());
+        }
+        return false;
     }
 }

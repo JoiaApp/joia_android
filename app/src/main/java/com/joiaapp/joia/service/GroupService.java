@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,6 +16,7 @@ import com.joiaapp.joia.MiddleManResponseHandler;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
+import com.joiaapp.joia.dto.Mention;
 import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.CreateGroupRequest;
@@ -110,8 +112,7 @@ public class GroupService {
             try {
                 byte[] imageBytes = Base64.decode(user.getImage(), Base64.DEFAULT);
                 return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Log.w(TAG, "Failed to decode image", e);
             }
         }
@@ -131,17 +132,19 @@ public class GroupService {
     }
 
 
-
     public void publishGroupMessages(Group group, List<Message> messages, ResponseHandler<List<Message>> responseHandler) {
         String url = serverBaseUrl + "/groups/" + group.getGuid() + "/responses.json";
         publishGroupMessage(url, messages, responseHandler, new ArrayList<Message>());
     }
 
     private void publishGroupMessage(final String url, final List<Message> messages, final ResponseHandler<List<Message>> finalResponseHandler, final List<Message> failedPublishes) {
-        GsonCookieRequest request = new GsonCookieRequest<Message>(Request.Method.POST, url, messages.get(0), new ResponseHandler<Message>() {
+        final Message currentMessage = messages.get(0);
+        GsonCookieRequest request = new GsonCookieRequest<Message>(Request.Method.POST, url, currentMessage, new ResponseHandler<Message>() {
             @Override
             public void onResponse(Message response) {
-                messages.remove(0);
+                currentMessage.setId(response.getId());
+                publishMentions(currentMessage, getCurrentGroup());
+                messages.remove(currentMessage);
                 if (messages.isEmpty()) {
                     finalResponseHandler.onResponse(failedPublishes);
                 } else {
@@ -160,6 +163,27 @@ public class GroupService {
             }
         });
         requestQueue.add(request);
+    }
+
+    private void publishMentions(Message message, Group group) {
+        String url = serverBaseUrl + "/groups/" + group.getGuid() + "/mentions.json";
+        for (final Mention currentMention : message.getMentions()) {
+            currentMention.setResponse_id(message.getId());
+            GsonCookieRequest request = new GsonCookieRequest<Mention>(Request.Method.POST, url, currentMention, new ResponseHandler<Mention>() {
+                @Override
+                public void onResponse(Mention response) {
+                    currentMention.setId(response.getId());
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //TODO: handle failed saves, or better yet, update the server to accept a full message with mentions on it
+                    Toast toast = Toast.makeText(mainActivity.getApplicationContext(), "Failed to add mentions to a message.", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            });
+            requestQueue.add(request);
+        }
     }
 
     private void setCachedGroupMessages(List<Message> cachedGroupMessages) {

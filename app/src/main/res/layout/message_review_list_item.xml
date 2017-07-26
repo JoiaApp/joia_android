@@ -33,14 +33,6 @@
         android:paddingTop="8dp">
 
         <com.joiaapp.joia.CustomFontTextView
-            android:text="with "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView3"
-            android:layout_weight="1"
-            style="@style/Caption"/>
-
-        <com.joiaapp.joia.CustomFontTextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

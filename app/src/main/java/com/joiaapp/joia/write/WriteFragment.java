@@ -24,6 +24,7 @@ import com.joiaapp.joia.MainActivity;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.ResponseHandler;
+import com.joiaapp.joia.dto.Mention;
 import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.Prompt;
 import com.joiaapp.joia.service.GroupService;
@@ -34,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static com.joiaapp.joia.write.MentionFriendsActivity.MENTIONED;
 
 /**
  * Created by arnell on 10/28/2016.
@@ -41,12 +43,13 @@ import static android.app.Activity.RESULT_OK;
  */
 
 public class WriteFragment extends Fragment implements View.OnClickListener, MainAppFragment {
-    private static final int TAG_FRIENDS_REQUEST_CODE = 9999;
+    private static final int MENTION_FRIENDS_REQUEST_CODE = 9999;
+    private static final int TOTAL_MESSAGES = 3;
     private View rootView;
     private ViewFlipper viewFlipper;
     private ViewGroup vgIntro;
     private ViewGroup vgForm;
-    private ViewGroup vgTagFriends;
+    private ViewGroup vgMentionFriends;
     private ViewGroup vgReview;
     private ViewGroup vgPublishSuccess;
 
@@ -56,7 +59,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     private EditText etMessageText;
     private TextView tvWriteMessageIndex;
 
-    private Button btnTagFriends;
+    private Button btnMentionFriends;
 
     private MessageReviewArrayAdapter messageReviewArrayAdapter;
     private ListView lvReviewMessages;
@@ -66,7 +69,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
 
     private List<Message> messagesInProgress = new ArrayList<>();
     private List<Message> unfinishedMessages = new ArrayList<>();
-    private static final int TOTAL_MESSAGES = 3;
+    private List<Mention> currentMentions = new ArrayList<>();
 
     ArrayAdapter<Prompt> promptArrayAdapter;
 
@@ -125,8 +128,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         tvWriteMessageIndex = (TextView) rootView.findViewById(R.id.tvWriteMessageIndex);
         tvWriteMessageIndex.setText(String.format("%s of %s Today", 1, TOTAL_MESSAGES));
 
-        btnTagFriends = (Button) rootView.findViewById(R.id.btnTagFriends);
-        btnTagFriends.setOnClickListener(this);
+        btnMentionFriends = (Button) rootView.findViewById(R.id.btnMentionFriends);
+        btnMentionFriends.setOnClickListener(this);
 
         btnGoToJournal = (Button) rootView.findViewById(R.id.btnGoToJournal);
         btnGoToJournal.setOnClickListener(this);
@@ -160,6 +163,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
             message.setUserId(ServiceFactory.getUserService().getCurrentUser().getId());
             message.setCreatedAt(new Date());
             message.setText(selectedPrompt, messageText);
+            message.getMentions().addAll(currentMentions);
+            currentMentions.clear();
             return message;
         }
     }
@@ -211,27 +216,33 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         int promptIdx = promptArrayAdapter.getPosition(message.getPromptObj());
         spPrompt.setSelection(promptIdx);
         etMessageText.setText(message.getText());
+        currentMentions.addAll(message.getMentions());
     }
 
     private void updateMessageIndexLabel() {
         tvWriteMessageIndex.setText(String.format("%s of %s Today", messagesInProgress.size() + 1, TOTAL_MESSAGES));
     }
 
-    public void onTagFriendsButtonTap() {
+    public void onMentionFriendsButtonTap() {
 //        ViewGroup sceneRoot = (ViewGroup) rootView;
 //        Scene writeScene = Scene.getSceneForLayout(sceneRoot, R.layout.write__form, getContext());
-//        Scene tagFriendsScene = new Scene(sceneRoot, vgIntro);
+//        Scene mentionFriendsScene = new Scene(sceneRoot, vgIntro);
 //        Transition transition = new Slide(Gravity.TOP);
 //        TransitionManager.beginDelayedTransition(sceneRoot, transition);
 
-        Intent intent = new Intent(getContext(), TagFriendsActivity.class);
-        startActivityForResult(intent, TAG_FRIENDS_REQUEST_CODE);
+        Intent intent = new Intent(getContext(), MentionFriendsActivity.class);
+        startActivityForResult(intent, MENTION_FRIENDS_REQUEST_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TAG_FRIENDS_REQUEST_CODE && resultCode == RESULT_OK) {
-
+        List<Mention> mentioned = (List<Mention>) data.getExtras().get(MENTIONED);
+        if (requestCode == MENTION_FRIENDS_REQUEST_CODE && resultCode == RESULT_OK && mentioned != null) {
+            currentMentions.clear();
+            currentMentions.addAll(mentioned);
+        } else {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Mentions not updated.", Toast.LENGTH_LONG);
+            toast.show();
         }
     }
 
@@ -296,8 +307,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
             case R.id.btnGoToJournal:
                 ((MainActivity)getActivity()).showJournalView();
                 break;
-            case R.id.btnTagFriends:
-                onTagFriendsButtonTap();
+            case R.id.btnMentionFriends:
+                onMentionFriendsButtonTap();
                 break;
         }
     }

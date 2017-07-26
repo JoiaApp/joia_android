@@ -39,16 +39,16 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnTagFriends"
+            android:id="@+id/btnMentionFriends"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_tagfriends"
+            android:background="@drawable/button_mentionfriends"
             android:drawableStart="@mipmap/ic_user_icon_smaller"
             android:paddingBottom="8dp"
             android:paddingEnd="24dp"
             android:paddingStart="18dp"
             android:paddingTop="8dp"
-            android:text="Tag Friends"
+            android:text="Mention Friends"
             android:textAllCaps="false"
             android:textColor="@color/colorPrimary"
             android:textSize="13sp"

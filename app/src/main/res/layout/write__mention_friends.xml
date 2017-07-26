@@ -10,12 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:gravity="center_vertical"
-        android:text="Tag Friends to Message"
+        android:text="Mention Friends in Message"
         android:textAlignment="center"/>
 
     <!-- TODO: reference text color instead of explicit one-->
     <Button
-        android:id="@+id/btnDoneTagging"
+        android:id="@+id/btnDoneMentioning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/tvHeader"
@@ -31,7 +31,7 @@
         android:textStyle="normal|bold"/>
 
     <LinearLayout
-        android:id="@+id/llTagSomebodyElse"
+        android:id="@+id/llMentionSomebodyElse"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,14 +52,14 @@
             android:layout_height="match_parent"
             android:layout_weight="1.00"
             android:gravity="center_vertical"
-            android:text="Tag somebody not in this group"/>
+            android:text="Mention somebody not in this group"/>
     </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/llTagSomebodyElse"
-        android:id="@+id/lvTagFriends"/>
+        android:layout_below="@+id/llMentionSomebodyElse"
+        android:id="@+id/lvMentionFriends"/>
 
 </RelativeLayout>

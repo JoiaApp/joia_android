@@ -34,7 +34,7 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".write.TagFriendsActivity"
+            android:name=".write.MentionFriendsActivity"
             android:screenOrientation="portrait">
         </activity>
     </application>

@@ -1,9 +1,9 @@
 package com.joiaapp.joia.dto;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by arnell on 11/4/2016.
@@ -21,7 +21,7 @@ public class Message {
     private User user;
     private Date created_at;
     private Date updated_at;
-    private transient Set<Mention> mentions = new HashSet<>();
+    private List<Mention> mentions = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -107,11 +107,11 @@ public class Message {
         return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
     }
 
-    public Set<Mention> getMentions() {
+    public List<Mention> getMentions() {
         return mentions;
     }
 
-    public void setMentions(Set<Mention> mentions) {
+    public void setMentions(List<Mention> mentions) {
         this.mentions = mentions;
     }
 
@@ -120,10 +120,13 @@ public class Message {
     }
 
     public String getMentionsStr() {
-        String mentionsStr = "";
-        for (Mention m : mentions) {
-            mentionsStr += m.getUser_id() + ", ";
+        if (mentions.isEmpty()) {
+            return "";
         }
-        return mentionsStr;
+        String mentionsStr = "With: ";
+        for (Mention m : mentions) {
+            mentionsStr += m.getUser().getName() + ", ";
+        }
+        return mentionsStr.substring(0, mentionsStr.length()-2);
     }
 }

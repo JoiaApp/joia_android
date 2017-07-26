@@ -1,5 +1,6 @@
 package com.joiaapp.joia.dto;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Copyright 2017 Joia. All rights reserved.
  */
 
-public class Group {
+public class Group implements Serializable{
     private Integer id;
     private String name;
     private String guid;

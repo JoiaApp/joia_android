@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
+import com.joiaapp.joia.dto.Mention;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.group.GroupMembersArrayAdapter;
 import com.joiaapp.joia.service.GroupService;
@@ -26,23 +27,24 @@ import java.util.List;
  * Copyright 2017 Joia. All rights reserved.
  */
 
-public class TagFriendsActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
-    private ListView lvTagFriends;
-    private Button btnDoneTagging;
+public class MentionFriendsActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener {
+    public static final String MENTIONED = "MENTIONED";
+    private ListView lvMentionFriends;
+    private Button btnDoneMentioning;
     private GroupMembersArrayAdapter groupMembersArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.write__tag_friends);
-        lvTagFriends = (ListView) findViewById(R.id.lvTagFriends);
-        btnDoneTagging =  (Button) findViewById(R.id.btnDoneTagging);
+        setContentView(R.layout.write__mention_friends);
+        lvMentionFriends = (ListView) findViewById(R.id.lvMentionFriends);
+        btnDoneMentioning =  (Button) findViewById(R.id.btnDoneMentioning);
 
         groupMembersArrayAdapter = new GroupMembersArrayAdapter(this, new ArrayList<User>(), true);
-        lvTagFriends.setAdapter(groupMembersArrayAdapter);
-        lvTagFriends.setOnItemClickListener(this);
+        lvMentionFriends.setAdapter(groupMembersArrayAdapter);
+        lvMentionFriends.setOnItemClickListener(this);
 
-        btnDoneTagging.setOnClickListener(this);
+        btnDoneMentioning.setOnClickListener(this);
 
         GroupService groupService = ServiceFactory.getGroupService();
         final Group group = groupService.getCurrentGroup();
@@ -77,9 +79,13 @@ public class TagFriendsActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnDoneTagging) {
+        if (v.getId() == R.id.btnDoneMentioning) {
             Intent iData = new Intent();
-            iData.putExtra("TAGGED_FRIENDS", groupMembersArrayAdapter.getSelected().toArray());
+            ArrayList<Mention> mentions = new ArrayList<>();
+            for (User user : groupMembersArrayAdapter.getSelected()) {
+                mentions.add(new Mention(user));
+            }
+            iData.putExtra(MENTIONED, mentions);
             setResult(Activity.RESULT_OK, iData);
             finish();
         }

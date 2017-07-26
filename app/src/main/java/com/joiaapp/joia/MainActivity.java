@@ -32,9 +32,8 @@ import com.joiaapp.joia.write.WriteFragment;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
 //TODO: update all the styling
-//TODO: make the back button work during registration / sign in
 //TODO: make the opal header hide when focused on registration fields
-//TODO: implement mentions
+//TODO: finish implementing mentions (edit mentions not implemented)
 //TODO: implement group page
 //TODO: implement settings page
 
