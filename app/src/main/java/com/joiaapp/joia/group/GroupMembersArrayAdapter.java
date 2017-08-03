@@ -29,7 +29,7 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
     private ViewHolder viewHolder;
     private List<User> members;
     private boolean selectable;
-    private Set<User> selectedMap = new HashSet<>();
+    private Set<User> selectedSet = new HashSet<>();
 
     public GroupMembersArrayAdapter(Context context, List<User> members, boolean selectable) {
         super(context, -1, members);
@@ -60,7 +60,7 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
         viewHolder.tvMemberRole.setText(m.getRole());
         Bitmap userImage = ServiceFactory.getGroupService().getGroupMemberImageBitmap(m);
         viewHolder.ivMemberIcon.setImageBitmap(userImage);
-        if (selectable && selectedMap.contains(m)) {
+        if (selectable && selectedSet.contains(m)) {
             viewHolder.ivCheck.setVisibility(View.VISIBLE);
         } else {
             viewHolder.ivCheck.setVisibility(View.GONE);
@@ -77,16 +77,16 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
     }
 
     public void toggleSelected(User member) {
-        if (selectedMap.contains(member)) {
-            selectedMap.remove(member);
+        if (selectedSet.contains(member)) {
+            selectedSet.remove(member);
         } else {
-            selectedMap.add(member);
+            selectedSet.add(member);
         }
         notifyDataSetChanged();
     }
 
     public Set<User> getSelected() {
-        return selectedMap;
+        return selectedSet;
     }
 
     private static class ViewHolder {

@@ -13,7 +13,6 @@ import com.android.volley.VolleyError;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
-import com.joiaapp.joia.dto.Mention;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.group.GroupMembersArrayAdapter;
 import com.joiaapp.joia.service.GroupService;
@@ -75,17 +74,23 @@ public class MentionFriendsActivity extends Activity implements View.OnClickList
             }
         }
         groupMembersArrayAdapter.setMembers(selectableUsers);
+
+        // Select preselected users
+        List<User> mentioned = (List<User>) getIntent().getExtras().get(MENTIONED);
+        for (User user : mentioned) {
+            groupMembersArrayAdapter.toggleSelected(user);
+        }
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnDoneMentioning) {
             Intent iData = new Intent();
-            ArrayList<Mention> mentions = new ArrayList<>();
+            ArrayList<User> mentioned = new ArrayList<>();
             for (User user : groupMembersArrayAdapter.getSelected()) {
-                mentions.add(new Mention(user));
+                mentioned.add(user);
             }
-            iData.putExtra(MENTIONED, mentions);
+            iData.putExtra(MENTIONED, mentioned);
             setResult(Activity.RESULT_OK, iData);
             finish();
         }

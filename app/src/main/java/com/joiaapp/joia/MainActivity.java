@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 //TODO: update all the styling
 //TODO: make the opal header hide when focused on registration fields
-//TODO: finish implementing mentions (edit mentions not implemented)
+//TODO: finish implementing mentions (show mentions on the write form)
 //TODO: implement group page
 //TODO: implement settings page
 

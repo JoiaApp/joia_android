@@ -3,13 +3,14 @@ package com.joiaapp.joia.dto;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by arnell on 11/4/2016.
  * Copyright 2017 Joia. All rights reserved.
  */
 
-public class User implements Serializable{
+public class User implements Serializable {
     private Integer id;
     private String email;
     private String name;
@@ -17,7 +18,6 @@ public class User implements Serializable{
     private String role;
     private String image;
     private transient List<Group> groups = new ArrayList<>();
-
 
     public Integer getId() {
         return id;
@@ -73,6 +73,9 @@ public class User implements Serializable{
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
         if (o == null || !(o instanceof User)) {
             return false;
         }
@@ -83,5 +86,10 @@ public class User implements Serializable{
             return email.equals(other.getEmail());
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email);
     }
 }

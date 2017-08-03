@@ -27,6 +27,7 @@ import com.joiaapp.joia.ResponseHandler;
 import com.joiaapp.joia.dto.Mention;
 import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.Prompt;
+import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.service.GroupService;
 import com.joiaapp.joia.service.ServiceFactory;
 
@@ -231,15 +232,25 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
 //        TransitionManager.beginDelayedTransition(sceneRoot, transition);
 
         Intent intent = new Intent(getContext(), MentionFriendsActivity.class);
+        ArrayList<User> mentioned = new ArrayList<>();
+        for (Mention mention : currentMentions) {
+            mentioned.add(mention.getUser());
+        }
+        intent.putExtra(MENTIONED, mentioned);
         startActivityForResult(intent, MENTION_FRIENDS_REQUEST_CODE);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        List<Mention> mentioned = (List<Mention>) data.getExtras().get(MENTIONED);
+        if (data == null) {
+            return;
+        }
+        List<User> mentioned = (List<User>) data.getExtras().get(MENTIONED);
         if (requestCode == MENTION_FRIENDS_REQUEST_CODE && resultCode == RESULT_OK && mentioned != null) {
             currentMentions.clear();
-            currentMentions.addAll(mentioned);
+            for (User user : mentioned) {
+                currentMentions.add(new Mention(user));
+            }
         } else {
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Mentions not updated.", Toast.LENGTH_LONG);
             toast.show();
