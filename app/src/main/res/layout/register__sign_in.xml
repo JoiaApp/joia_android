@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/editTextBottomMargin"
         android:ems="10"
         android:inputType="textEmailAddress"/>
 
@@ -41,14 +41,12 @@
         android:layout_alignStart="@+id/etPassword"
         android:text="Password"/>
 
-
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="352dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSubmitSignIn"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="47dp"
         android:ems="10"
         android:inputType="textPassword"/>
 
@@ -57,8 +55,8 @@
         style="@style/OrangeButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="@dimen/buttonMarginBottom"
+        android:layout_marginTop="@dimen/buttonMarginTop"
         android:text="Submit"/>
 
 </RelativeLayout>

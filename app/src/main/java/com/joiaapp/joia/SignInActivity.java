@@ -2,10 +2,8 @@ package com.joiaapp.joia;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.service.ServiceFactory;
 import com.joiaapp.joia.service.UserService;
+import com.joiaapp.joia.util.SoftKeyboardVisibilityHandler;
 
 /**
  * Created by arnell on 1/9/2017.
@@ -42,19 +41,8 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         etPassword = (EditText) findViewById(R.id.etPassword);
         ivOpalHeader = (ImageView) findViewById(R.id.ivOpalHeader);
 
-        final RelativeLayout rlRegisterSignIn = (RelativeLayout) findViewById(R.id.rlRegisterSignIn);
-
-        // TODO: put this somewhere else
-        rlRegisterSignIn.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                rlRegisterSignIn.getWindowVisibleDisplayFrame(r);
-
-                int heightDiff = rlRegisterSignIn.getRootView().getHeight() - (r.bottom - r.top);
-                ivOpalHeader.setVisibility(heightDiff > 100 ? View.GONE : View.VISIBLE);
-            }
-        });
+        RelativeLayout rlRegisterSignIn = (RelativeLayout) findViewById(R.id.rlRegisterSignIn);
+        SoftKeyboardVisibilityHandler.hideWhenKeyboardVisible(rlRegisterSignIn, ivOpalHeader);
     }
 
     @Override
@@ -73,8 +61,6 @@ public class SignInActivity extends Activity implements View.OnClickListener {
         userService.signIn(email, password, new ResponseHandler<User>() {
             @Override
             public void onResponse(User user) {
-
-
                 Intent iData = new Intent();
                 setResult(Activity.RESULT_OK, iData);
                 finish();
@@ -82,14 +68,11 @@ public class SignInActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("That didn't work!");
                 CharSequence text = "Unable to sign in with the provided credentials!";
                 Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
                 toast.show();
             }
         });
-
-
     }
 
 

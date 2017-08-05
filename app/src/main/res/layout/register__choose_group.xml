@@ -5,9 +5,8 @@
               android:gravity="center_horizontal"
               android:orientation="vertical">
 
-    <include layout="@layout/opal_header"/>
-
     <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvChooseGroupExplanation"
         style="@style/RegisterExplanation"
         android:text="Welcome to Joia, let's begin with your group..."/>
 

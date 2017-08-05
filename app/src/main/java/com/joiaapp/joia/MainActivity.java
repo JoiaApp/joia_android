@@ -234,8 +234,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabLayout.getTabAt(WRITE_PAGE).select();
     }
 
-    public void setTabLayoutHidden(boolean hidden) {
-        tabLayout.setVisibility(hidden ? View.GONE : View.VISIBLE);
+    public TabLayout getTabLayout() {
+        return tabLayout;
     }
 
     /**

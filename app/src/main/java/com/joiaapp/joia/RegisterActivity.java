@@ -15,6 +15,9 @@ import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.service.ServiceFactory;
 import com.joiaapp.joia.service.UserService;
+import com.joiaapp.joia.util.SoftKeyboardVisibilityHandler;
+
+import java.util.Arrays;
 
 import static com.joiaapp.joia.FieldHelper.emptyTextFieldCheck;
 import static com.joiaapp.joia.FieldHelper.getFieldText;
@@ -60,7 +63,6 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
         vfRegister = (ViewFlipper) findViewById(R.id.vfRegister);
 
-        //TODO: create a separate activity for choosing? and remove register__choose_group.xml from register__all.xml
         // register__choose_group.xml
         vgChooseGroup = (ViewGroup) findViewById(R.id.loChooseGroup);
         btnJoinAGroup = (Button) vgChooseGroup.findViewById(R.id.btnJoinAGroup);
@@ -88,6 +90,15 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         etCreateGroupName = (EditText) vgCreateGroup.findViewById(R.id.etGroupName);
         btnSubmitCreateGroup = (Button) vgCreateGroup.findViewById(R.id.btnSubmitCreateGroup);
         btnSubmitCreateGroup.setOnClickListener(this);
+
+        View llRegisterAll = findViewById(R.id.llRegisterAll);
+        SoftKeyboardVisibilityHandler.hideWhenKeyboardVisible(llRegisterAll, Arrays.asList(
+                findViewById(R.id.ivOpalHeader),
+                findViewById(R.id.tvChooseGroupExplanation),
+                findViewById(R.id.tvCreateGroupExplanation),
+                findViewById(R.id.tvCreateUserExplanation),
+                findViewById(R.id.tvJoinGroupExplanation)
+        ));
     }
 
     @Override

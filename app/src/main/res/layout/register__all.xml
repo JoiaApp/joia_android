@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/vfRegister"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/llRegisterAll"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <include android:id="@+id/loChooseGroup" layout="@layout/register__choose_group"/>
-    <include android:id="@+id/loJoinGroup" layout="@layout/register__join_group"/>
-    <include android:id="@+id/loCreateUser" layout="@layout/register__create_user"/>
-    <include android:id="@+id/loCreateGroup" layout="@layout/register__create_group"/>
-</ViewFlipper>
+    <include layout="@layout/opal_header"/>
+
+    <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/vfRegister"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+
+
+        <include
+            android:id="@+id/loChooseGroup"
+            layout="@layout/register__choose_group"/>
+
+        <include
+            android:id="@+id/loJoinGroup"
+            layout="@layout/register__join_group"/>
+
+        <include
+            android:id="@+id/loCreateUser"
+            layout="@layout/register__create_user"/>
+
+        <include
+            android:id="@+id/loCreateGroup"
+            layout="@layout/register__create_group"/>
+    </ViewFlipper>
+</LinearLayout>

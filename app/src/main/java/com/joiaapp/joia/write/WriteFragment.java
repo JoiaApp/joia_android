@@ -2,13 +2,11 @@ package com.joiaapp.joia.write;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,6 +28,7 @@ import com.joiaapp.joia.dto.Prompt;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.service.GroupService;
 import com.joiaapp.joia.service.ServiceFactory;
+import com.joiaapp.joia.util.SoftKeyboardVisibilityHandler;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -115,17 +114,9 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         });
 
         etMessageText = (EditText) rootView.findViewById(R.id.etMessageText);
-        // TODO: put this somewhere else
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Rect r = new Rect();
-                rootView.getWindowVisibleDisplayFrame(r);
 
-                int heightDiff = rootView.getRootView().getHeight() - (r.bottom - r.top);
-                ((MainActivity) getActivity()).setTabLayoutHidden(heightDiff > 100);
-            }
-        });
+        SoftKeyboardVisibilityHandler.hideWhenKeyboardVisible(rootView, ((MainActivity) getActivity()).getTabLayout());
+
         tvWriteMessageIndex = (TextView) rootView.findViewById(R.id.tvWriteMessageIndex);
         tvWriteMessageIndex.setText(String.format("%s of %s Today", 1, TOTAL_MESSAGES));
 

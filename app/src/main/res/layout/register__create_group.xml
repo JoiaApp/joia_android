@@ -4,13 +4,9 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true">
 
-    <include
-        android:id="@+id/ivOpalHeader"
-        layout="@layout/opal_header"/>
-
     <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvCreateGroupExplanation"
         style="@style/RegisterExplanation"
-        android:layout_below="@+id/ivOpalHeader"
         android:text="Great! Next, let's get your group set up..."/>
 
     <com.joiaapp.joia.CustomFontTextView
@@ -22,26 +18,23 @@
         android:layout_alignStart="@+id/etGroupName"
         android:text="Group Name"/>
 
-
     <EditText
         android:id="@+id/etGroupName"
         android:layout_width="352dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSubmitCreateGroup"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="47dp"
         android:ems="10"
         android:hint="Enter Group Name"
         android:inputType="text"/>
-
 
     <Button
         android:id="@+id/btnSubmitCreateGroup"
         style="@style/OrangeButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="@dimen/buttonMarginBottom"
+        android:layout_marginTop="@dimen/buttonMarginTop"
         android:text="Submit"/>
 
 </RelativeLayout>

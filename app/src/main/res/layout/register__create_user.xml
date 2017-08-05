@@ -4,13 +4,9 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true">
 
-    <include
-        android:id="@+id/ivOpalHeader"
-        layout="@layout/opal_header"/>
-
     <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvCreateUserExplanation"
         style="@style/RegisterExplanation"
-        android:layout_below="@+id/ivOpalHeader"
         android:text="Welcome to Joia, begin by entering in your information..."/>
 
 
@@ -30,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvEmail"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/editTextBottomMargin"
         android:ems="10"
         android:inputType="textPersonName"/>
 
@@ -49,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/editTextBottomMargin"
         android:ems="10"
         android:inputType="textEmailAddress"/>
 
@@ -69,7 +65,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSubmitCreateUser"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
         android:ems="10"
         android:inputType="textPassword"/>
 
@@ -78,7 +73,7 @@
         style="@style/OrangeButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="@dimen/buttonMarginBottom"
+        android:layout_marginTop="@dimen/buttonMarginTop"
         android:text="Submit"/>
 </RelativeLayout>

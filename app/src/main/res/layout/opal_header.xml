@@ -18,10 +18,10 @@
     <ImageView
         android:id="@+id/ivJoiaText"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:background="@color/registerHeader"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp"
         android:src="@drawable/joia_logotype_svg"
         android:tint="@color/white"/>
 

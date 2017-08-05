@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/rlRegisterSignIn"
+                android:id="@+id/rlRegisterJoin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true">
 
-    <include
-        android:id="@+id/ivOpalHeader"
-        layout="@layout/opal_header"/>
-
     <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvJoinGroupExplanation"
         style="@style/RegisterExplanation"
-
-        android:layout_below="@+id/ivOpalHeader"
         android:text="Great! Next, let's get your group set up..."/>
 
     <com.joiaapp.joia.CustomFontTextView
@@ -30,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvGroupPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="@dimen/editTextBottomMargin"
         android:ems="10"
         android:hint="Enter Group ID"
         android:inputType="text"/>
@@ -50,7 +45,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnSubmitJoinGroup"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="47dp"
         android:ems="10"
         android:hint="Enter Password"
         android:inputType="text"/>
@@ -60,8 +54,8 @@
         style="@style/OrangeButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="@dimen/buttonMarginBottom"
+        android:layout_marginTop="@dimen/buttonMarginTop"
         android:text="Submit"/>
 
 </RelativeLayout>
