@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.util;
 
 import android.content.ContentValues;
 import android.content.Context;

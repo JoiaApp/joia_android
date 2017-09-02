@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.service.ServiceFactory;
 import com.joiaapp.joia.service.UserService;
+import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.util.SoftKeyboardVisibilityHandler;
 
 /**

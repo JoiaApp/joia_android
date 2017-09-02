@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.ResponseHandler;
+import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.group.GroupMembersArrayAdapter;
@@ -39,7 +39,7 @@ public class MentionFriendsActivity extends Activity implements View.OnClickList
         lvMentionFriends = (ListView) findViewById(R.id.lvMentionFriends);
         btnDoneMentioning =  (Button) findViewById(R.id.btnDoneMentioning);
 
-        groupMembersArrayAdapter = new GroupMembersArrayAdapter(this, new ArrayList<User>(), true);
+        groupMembersArrayAdapter = new GroupMembersArrayAdapter(this, new ArrayList<User>(), true, false);
         lvMentionFriends.setAdapter(groupMembersArrayAdapter);
         lvMentionFriends.setOnItemClickListener(this);
 

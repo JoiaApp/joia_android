@@ -22,7 +22,7 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.joiaapp.joia.MainActivity;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.ResponseHandler;
+import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.dto.Mention;
 import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.Prompt;

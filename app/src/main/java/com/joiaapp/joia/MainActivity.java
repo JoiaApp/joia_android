@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 //TODO: finish implementing mentions (show mentions on the write form)
 //TODO: implement group page
 //TODO: implement settings page
+//TODO: clear views when signing out
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

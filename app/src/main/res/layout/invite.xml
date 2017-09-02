@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rlInvite"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/opal_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvJoinGroupExplanation"
+        style="@style/RegisterExplanation"
+        android:layout_above="@+id/tvEmail"
+        android:layout_marginBottom="50dp"
+        android:text="Enter the email of the person that you'd like to invite to this group."/>
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvEmail"
+        style="@style/FieldLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/etEmail"
+        android:layout_alignStart="@+id/etEmail"
+        android:layout_centerVertical="true"
+        android:text="Email"/>
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="352dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnSubmitInvite"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/editTextBottomMargin"
+        android:ems="10"
+        android:inputType="textEmailAddress"/>
+
+    <Button
+        android:id="@+id/btnSubmitInvite"
+        style="@style/OrangeButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/buttonMarginBottom"
+        android:layout_marginTop="@dimen/buttonMarginTop"
+        android:text="Submit"/>
+
+</RelativeLayout>

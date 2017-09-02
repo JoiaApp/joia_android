@@ -10,12 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.service.GroupService;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.ResponseHandler;
+import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
+import com.joiaapp.joia.service.GroupService;
 import com.joiaapp.joia.service.ServiceFactory;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class GroupFragment extends Fragment implements View.OnClickListener, Mai
         tvGroupName = (TextView) rootView.findViewById(R.id.tvGroupName);
         tvGroupMemberCount = (TextView) rootView.findViewById(R.id.tvGroupMemberCount);
         lvGroupMembers = (ListView) rootView.findViewById(R.id.lvGroupMembers);
-        groupMembersArrayAdapter = new GroupMembersArrayAdapter(getActivity(), new ArrayList<User>(), false);
+        groupMembersArrayAdapter = new GroupMembersArrayAdapter(getActivity(), new ArrayList<User>(), false, true);
         lvGroupMembers.setAdapter(groupMembersArrayAdapter);
         GroupService groupService = ServiceFactory.getGroupService();
         final Group group = groupService.getCurrentGroup();
@@ -86,7 +86,9 @@ public class GroupFragment extends Fragment implements View.OnClickListener, Mai
 
     @Override
     public void onClick(View v) {
-
+//        if (v.getId() == R.id.btnI)
+//        Intent intent = new Intent(this, InviteActivity.class);
+//        startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
     }
 
     @Override

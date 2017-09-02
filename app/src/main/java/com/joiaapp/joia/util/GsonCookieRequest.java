@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.util;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -51,7 +51,7 @@ public class GsonCookieRequest<T> extends Request<T> {
 
         try {
             String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
-            return Response.success((T)GsonUtil.gson().fromJson(jsonString, getResponseType()), HttpHeaderParser.parseCacheHeaders(response));
+            return Response.success((T) GsonUtil.gson().fromJson(jsonString, getResponseType()), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
         }

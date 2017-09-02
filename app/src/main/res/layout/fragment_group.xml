@@ -7,65 +7,36 @@
 
     <LinearLayout
         android:id="@+id/llGroupHeader"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:gravity="center"
         android:layout_height="100dp"
-        android:background="@android:color/holo_blue_dark">
+        android:background="@android:color/holo_blue_dark"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <com.joiaapp.joia.CustomFontTextView
-            android:text="College Friends"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
             android:id="@+id/tvGroupName"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            style="@style/Headline"/>
-
-        <com.joiaapp.joia.CustomFontTextView
-            android:text="8 Members"
+            style="@style/Headline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvGroupName"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/tvGroupMemberCount"
+            android:text="College Friends"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            style="@style/SubHeading"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llInviteToGroup"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/llGroupHeader"
-        android:layout_alignParentStart="true">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@android:drawable/btn_dialog"
-            android:id="@+id/ivInviteIcon"
-            />
+            android:textColor="@color/white"/>
 
         <com.joiaapp.joia.CustomFontTextView
-            android:text="Invite somebody to this group"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/textView6"
-            android:layout_weight="1.00"
-            android:gravity="center_vertical"
-            style="@style/Paragraph"/>
+            android:id="@+id/tvGroupMemberCount"
+            style="@style/SubHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="8 Members"
+            android:textAlignment="center"
+            android:textColor="@color/white"/>
     </LinearLayout>
 
     <ListView
+        android:id="@+id/lvGroupMembers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/llInviteToGroup"
-        android:id="@+id/lvGroupMembers"/>
+        android:layout_below="@+id/llGroupHeader"/>
 
 </RelativeLayout>

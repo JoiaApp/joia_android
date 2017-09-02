@@ -3,7 +3,7 @@ package com.joiaapp.joia.service;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.joiaapp.joia.GsonUtil;
+import com.joiaapp.joia.util.GsonUtil;
 import com.joiaapp.joia.MainActivity;
 
 /**

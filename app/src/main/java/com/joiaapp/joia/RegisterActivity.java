@@ -15,12 +15,13 @@ import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.service.ServiceFactory;
 import com.joiaapp.joia.service.UserService;
+import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.util.SoftKeyboardVisibilityHandler;
 
 import java.util.Arrays;
 
-import static com.joiaapp.joia.FieldHelper.emptyTextFieldCheck;
-import static com.joiaapp.joia.FieldHelper.getFieldText;
+import static com.joiaapp.joia.util.FieldHelper.emptyTextFieldCheck;
+import static com.joiaapp.joia.util.FieldHelper.getFieldText;
 
 /**
  * Created by arnell on 1/10/2017.

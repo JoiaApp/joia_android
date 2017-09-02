@@ -29,13 +29,15 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
     private ViewHolder viewHolder;
     private List<User> members;
     private boolean selectable;
+    private boolean inviteOption;
     private Set<User> selectedSet = new HashSet<>();
 
-    public GroupMembersArrayAdapter(Context context, List<User> members, boolean selectable) {
+    public GroupMembersArrayAdapter(Context context, List<User> members, boolean selectable, boolean inviteOption) {
         super(context, -1, members);
         this.context = context;
         this.members = members;
         this.selectable = selectable;
+        this.inviteOption = inviteOption;
     }
 
     @Override
@@ -70,6 +72,11 @@ public class GroupMembersArrayAdapter extends ArrayAdapter<User> {
 
     public void setMembers(List<User> newMembers) {
         members.clear();
+        if (inviteOption) {
+            User inviteUser = new User();
+            inviteUser.setName("Invite somebody to this group");
+            members.add(inviteUser);
+        }
         for (User member : newMembers) {
             members.add(member);
         }

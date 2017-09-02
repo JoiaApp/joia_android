@@ -9,17 +9,18 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.GsonCookieRequest;
-import com.joiaapp.joia.GsonListCookieRequest;
+import com.joiaapp.joia.util.GsonCookieRequest;
+import com.joiaapp.joia.util.GsonListCookieRequest;
 import com.joiaapp.joia.MainActivity;
-import com.joiaapp.joia.MiddleManResponseHandler;
+import com.joiaapp.joia.util.MiddleManResponseHandler;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.ResponseHandler;
+import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.Mention;
 import com.joiaapp.joia.dto.Message;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.CreateGroupRequest;
+import com.joiaapp.joia.dto.request.InviteRequest;
 import com.joiaapp.joia.dto.request.JoinGroupRequest;
 
 import java.util.ArrayList;
@@ -108,6 +109,9 @@ public class GroupService {
             }
         }).start();
          */
+        if (user.getId() == null) {
+            return BitmapFactory.decodeResource(mainActivity.getApplicationContext().getResources(), R.mipmap.plus);
+        }
         if (user.getImage() != null) {
             try {
                 byte[] imageBytes = Base64.decode(user.getImage(), Base64.DEFAULT);
@@ -130,7 +134,6 @@ public class GroupService {
         });
         requestQueue.add(request);
     }
-
 
     public void publishGroupMessages(Group group, List<Message> messages, ResponseHandler<List<Message>> responseHandler) {
         String url = serverBaseUrl + "/groups/" + group.getGuid() + "/responses.json";
@@ -184,6 +187,24 @@ public class GroupService {
             });
             requestQueue.add(request);
         }
+    }
+
+    public void sendInvite(String email, Group group) {
+        String url = serverBaseUrl + "/groups/" + group.getGuid() + "/invite.json";
+        InviteRequest inviteRequest = new InviteRequest(email);
+        GsonCookieRequest request = new GsonCookieRequest<String>(Request.Method.POST, url, inviteRequest, new ResponseHandler<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast toast = Toast.makeText(mainActivity.getApplicationContext(), "Failed to send invite.", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        });
+        requestQueue.add(request);
     }
 
     private void setCachedGroupMessages(List<Message> cachedGroupMessages) {

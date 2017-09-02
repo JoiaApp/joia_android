@@ -2,9 +2,9 @@ package com.joiaapp.joia.service;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.joiaapp.joia.GsonCookieRequest;
-import com.joiaapp.joia.GsonListCookieRequest;
-import com.joiaapp.joia.ResponseHandler;
+import com.joiaapp.joia.util.GsonCookieRequest;
+import com.joiaapp.joia.util.GsonListCookieRequest;
+import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.dto.Prompt;
 
 import java.util.List;

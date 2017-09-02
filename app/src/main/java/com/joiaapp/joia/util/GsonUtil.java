@@ -1,4 +1,4 @@
-package com.joiaapp.joia;
+package com.joiaapp.joia.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
