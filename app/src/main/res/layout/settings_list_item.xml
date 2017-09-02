@@ -10,16 +10,20 @@
         android:id="@+id/ivSettingIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:srcCompat="@android:drawable/sym_def_app_icon"/>
 
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvSettingName"
+        style="@style/Title2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:text="Setting 1"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
         android:layout_weight="1"
-        style="@style/Title2"/>
+        android:text="Setting 1"/>
 
 
 </LinearLayout>

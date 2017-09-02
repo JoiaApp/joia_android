@@ -18,6 +18,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
+import com.google.android.flexbox.FlexboxLayout;
 import com.joiaapp.joia.MainActivity;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
@@ -60,6 +61,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     private TextView tvWriteMessageIndex;
 
     private Button btnMentionFriends;
+
+    private FlexboxLayout mentionsLayout;
 
     private MessageReviewArrayAdapter messageReviewArrayAdapter;
     private ListView lvReviewMessages;
@@ -123,6 +126,8 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         btnMentionFriends = (Button) rootView.findViewById(R.id.btnMentionFriends);
         btnMentionFriends.setOnClickListener(this);
 
+        mentionsLayout = (FlexboxLayout) rootView.findViewById(R.id.flMentions);
+
         btnGoToJournal = (Button) rootView.findViewById(R.id.btnGoToJournal);
         btnGoToJournal.setOnClickListener(this);
 
@@ -157,6 +162,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
             message.setText(selectedPrompt, messageText);
             message.getMentions().addAll(currentMentions);
             currentMentions.clear();
+            updateMentionsListView();
             return message;
         }
     }
@@ -209,6 +215,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
         spPrompt.setSelection(promptIdx);
         etMessageText.setText(message.getText());
         currentMentions.addAll(message.getMentions());
+        updateMentionsListView();
     }
 
     private void updateMessageIndexLabel() {
@@ -242,9 +249,19 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
             for (User user : mentioned) {
                 currentMentions.add(new Mention(user));
             }
+            updateMentionsListView();
         } else {
             Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Mentions not updated.", Toast.LENGTH_LONG);
             toast.show();
+        }
+    }
+
+    private void updateMentionsListView() {
+        mentionsLayout.removeAllViews();
+        for (Mention mention : currentMentions) {
+            Button button = new Button(getContext());
+            button.setText(mention.getUser().getName());
+            mentionsLayout.addView(button);
         }
     }
 
