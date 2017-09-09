@@ -350,4 +350,10 @@ public class WriteFragment extends Fragment implements View.OnClickListener, Mai
     public boolean isNavBarNextButtonVisible() {
         return navNextButtonVisible;
     }
+
+    public void onReadPageSelected() {
+        if (viewFlipper.getDisplayedChild() == viewFlipper.indexOfChild(vgPublishSuccess)) {
+            setDisplayedView(vgIntro);
+        }
+    }
 }

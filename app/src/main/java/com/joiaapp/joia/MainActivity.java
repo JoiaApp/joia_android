@@ -33,8 +33,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 //TODO: update all the styling
 //TODO: make the opal header hide when focused on registration fields
-//TODO: finish implementing mentions (show mentions on the write form)
-//TODO: implement group page
+//TODO: finish styling the mentions on the write form
 //TODO: implement settings page
 //TODO: clear views when signing out
 
@@ -174,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int position) {
-        //System.out.println("onPageSelected: " + position);
         setTabIconColors(position);
         updateNavigationBar(position);
         switch (position) {
@@ -204,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
     private void onReadPageSelected() {
         readFragment.refreshView();
+        writeFragment.onReadPageSelected();
     }
 
     private void onGroupPageSelected() {
