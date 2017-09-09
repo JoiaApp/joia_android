@@ -1,10 +1,12 @@
 package com.joiaapp.joia.group;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,21 +14,23 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.service.GroupService;
 import com.joiaapp.joia.service.ServiceFactory;
+import com.joiaapp.joia.util.ResponseHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by arnell on 12/22/2016.
  * Copyright 2017 Joia. All rights reserved.
  */
 
-public class GroupFragment extends Fragment implements View.OnClickListener, MainAppFragment {
+public class GroupFragment extends Fragment implements MainAppFragment, AdapterView.OnItemClickListener {
     private TextView tvGroupName;
     private TextView tvGroupMemberCount;
     private ListView lvGroupMembers;
@@ -41,6 +45,7 @@ public class GroupFragment extends Fragment implements View.OnClickListener, Mai
         lvGroupMembers = (ListView) rootView.findViewById(R.id.lvGroupMembers);
         groupMembersArrayAdapter = new GroupMembersArrayAdapter(getActivity(), new ArrayList<User>(), false, true);
         lvGroupMembers.setAdapter(groupMembersArrayAdapter);
+        lvGroupMembers.setOnItemClickListener(this);
         GroupService groupService = ServiceFactory.getGroupService();
         final Group group = groupService.getCurrentGroup();
         if (group != null) {
@@ -85,10 +90,21 @@ public class GroupFragment extends Fragment implements View.OnClickListener, Mai
     }
 
     @Override
-    public void onClick(View v) {
-//        if (v.getId() == R.id.btnI)
-//        Intent intent = new Intent(this, InviteActivity.class);
-//        startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        User clickedUser = (User) adapterView.getItemAtPosition(position);
+        if (clickedUser.getId() == null) {
+            Intent intent = new Intent(getContext(), InviteActivity.class);
+            startActivityForResult(intent, InviteActivity.INVITE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == InviteActivity.INVITE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Toast toast = Toast.makeText(getActivity().getApplicationContext(), "Invite sent successfully.", Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 
     @Override

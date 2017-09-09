@@ -22,13 +22,13 @@
         </activity>
         <activity
             android:name=".SignInActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".InitialActivity"
@@ -37,6 +37,11 @@
         <activity
             android:name=".write.MentionFriendsActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".group.InviteActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
         </activity>
     </application>
 </manifest>

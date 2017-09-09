@@ -189,21 +189,10 @@ public class GroupService {
         }
     }
 
-    public void sendInvite(String email, Group group) {
+    public void sendInvite(String email, Group group, ResponseHandler<String> responseHandler) {
         String url = serverBaseUrl + "/groups/" + group.getGuid() + "/invite.json";
         InviteRequest inviteRequest = new InviteRequest(email);
-        GsonCookieRequest request = new GsonCookieRequest<String>(Request.Method.POST, url, inviteRequest, new ResponseHandler<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast toast = Toast.makeText(mainActivity.getApplicationContext(), "Failed to send invite.", Toast.LENGTH_LONG);
-                toast.show();
-            }
-        });
+        GsonCookieRequest request = new GsonCookieRequest<String>(Request.Method.POST, url, inviteRequest, responseHandler);
         requestQueue.add(request);
     }
 

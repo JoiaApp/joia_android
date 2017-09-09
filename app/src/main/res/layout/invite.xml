@@ -6,7 +6,7 @@
                 android:layout_alignParentBottom="true">
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/opalHeader"
         layout="@layout/opal_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,8 +15,8 @@
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvJoinGroupExplanation"
         style="@style/RegisterExplanation"
-        android:layout_above="@+id/tvEmail"
-        android:layout_marginBottom="50dp"
+        android:layout_below="@+id/opalHeader"
+        android:layout_marginTop="50dp"
         android:text="Enter the email of the person that you'd like to invite to this group."/>
 
     <com.joiaapp.joia.CustomFontTextView
