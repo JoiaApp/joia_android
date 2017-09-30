@@ -32,7 +32,6 @@ import com.joiaapp.joia.write.WriteFragment;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
 //TODO: update all the styling
-//TODO: make the opal header hide when focused on registration fields
 //TODO: finish styling the mentions on the write form
 //TODO: implement settings page
 //TODO: clear views when signing out

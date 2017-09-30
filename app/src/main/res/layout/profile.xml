@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true">
+
+    <ImageView
+        android:id="@+id/ivProfilePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvUserDisplayName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
+        app:srcCompat="@mipmap/opal_eyes_open"/>
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvUserDisplayName"
+        style="@style/RegisterExplanation"
+        android:text="User Name"
+        android:layout_marginTop="91dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvName"
+        style="@style/FieldLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Birthday"
+        android:layout_below="@+id/ivProfilePicture"
+        android:layout_alignStart="@+id/tvUserDisplayName"
+        android:layout_marginTop="73dp"/>
+
+
+    <Button
+        android:id="@+id/btnBirthday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvName"
+        android:layout_alignBottom="@+id/tvName"
+        android:layout_alignEnd="@+id/tvUserDisplayName"
+        android:text="Jan 15, 1989"
+        android:textAllCaps="false"/>
+
+    <com.joiaapp.joia.CustomFontTextView
+        android:id="@+id/tvPasswordl"
+        style="@style/FieldLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/tvName"/>
+
+
+    <Button
+        android:id="@+id/btnSaveUser"
+        style="@style/OrangeButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/buttonMarginBottom"
+        android:layout_marginTop="@dimen/buttonMarginTop"
+        android:text="Submit"/>
+
+</RelativeLayout>

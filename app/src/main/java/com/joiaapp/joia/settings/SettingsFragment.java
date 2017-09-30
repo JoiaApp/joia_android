@@ -1,5 +1,6 @@
 package com.joiaapp.joia.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -40,8 +41,14 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
         String clickedItem = (String) adapter.getItemAtPosition(position);
-        if ("Logout".equals(clickedItem)) {
-            ServiceFactory.getUserService().logout();
+        switch (clickedItem) {
+            case "Logout":
+                ServiceFactory.getUserService().logout();
+                break;
+            case "Profile":
+                Intent intent = new Intent(getContext(), ProfileActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 

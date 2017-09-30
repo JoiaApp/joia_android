@@ -3,19 +3,22 @@ package com.joiaapp.joia.service;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.util.GsonCookieRequest;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.joiaapp.joia.MainActivity;
-import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.CreateUserRequest;
 import com.joiaapp.joia.dto.request.SignInRequest;
+import com.joiaapp.joia.util.GsonCookieRequest;
+import com.joiaapp.joia.util.ResponseHandler;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -177,6 +180,18 @@ public class UserService {
         String url = serverBaseUrl + "/users.json";
         CreateUserRequest createUserRequest = new CreateUserRequest(newUser);
         GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.POST, url, createUserRequest, responseHandler, responseHandler);
+        requestQueue.add(request);
+    }
+
+    public void updateUser(User userToUpdate, Map<String, String> fieldsToUpdate, ResponseHandler<User> responseHandler) {
+        String url = serverBaseUrl + "users/" + userToUpdate.getId() + ".json";
+        JsonObject updateUserFieldsRequest = new JsonObject();
+        JsonObject userFields = new JsonObject();
+        for (Map.Entry<String, String> field : fieldsToUpdate.entrySet()) {
+            userFields.add(field.getKey(), new JsonPrimitive(field.getValue()));
+        }
+        updateUserFieldsRequest.add("user", userFields);
+        GsonCookieRequest request = new GsonCookieRequest<User>(Request.Method.PUT, url, updateUserFieldsRequest, responseHandler, responseHandler);
         requestQueue.add(request);
     }
 }
