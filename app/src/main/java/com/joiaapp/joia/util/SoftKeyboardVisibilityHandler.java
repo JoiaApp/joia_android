@@ -22,7 +22,7 @@ public class SoftKeyboardVisibilityHandler {
                 rootView.getWindowVisibleDisplayFrame(r);
 
                 int heightDiff = rootView.getRootView().getHeight() - (r.bottom - r.top);
-                boolean shouldHide = heightDiff > 100;
+                boolean shouldHide = heightDiff > 250;
                 for (View view : viewsToHide) {
                     view.setVisibility(shouldHide ? View.GONE : View.VISIBLE);
                 }
