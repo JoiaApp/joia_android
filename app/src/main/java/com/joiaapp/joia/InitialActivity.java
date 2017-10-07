@@ -12,6 +12,7 @@ import android.widget.Button;
  */
 
 public class InitialActivity extends Activity implements View.OnClickListener {
+    public static final int INITIAL_ACTIVITY_REQUEST_CODE = 10;
     private static final int SIGN_IN_ACTIVITY_REQUEST_CODE = 20;
     private static final int REGISTER_ACTIVITY_REQUEST_CODE = 30;
 

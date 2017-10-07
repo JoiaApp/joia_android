@@ -18,11 +18,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.joiaapp.joia.alarm.AlarmScheduler;
 import com.joiaapp.joia.group.GroupFragment;
 import com.joiaapp.joia.read.ReadFragment;
 import com.joiaapp.joia.service.ServiceFactory;
 import com.joiaapp.joia.settings.SettingsFragment;
 import com.joiaapp.joia.write.WriteFragment;
+
+import static com.joiaapp.joia.InitialActivity.INITIAL_ACTIVITY_REQUEST_CODE;
 
 /**
  * Created by arnell on 11/4/2016.
@@ -60,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private static final int READ_PAGE = 1;
     private static final int GROUP_PAGE = 2;
     private static final int SETTINGS_PAGE = 3;
-
-    private static final int INITIAL_ACTIVITY_REQUEST_CODE = 10;
 
 
     /**
@@ -105,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         tabLayout.getTabAt(GROUP_PAGE).setIcon(R.drawable.ic_group);
         tabLayout.getTabAt(SETTINGS_PAGE).setIcon(R.drawable.ic_settings);
         setTabIconColors(0);
+
+        AlarmScheduler.setAlarm(this);
     }
 
     public void startSignInProcess() {
@@ -120,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         }
         if (requestCode == INITIAL_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             showWriteView();
+            AlarmScheduler.setAlarm(this);
         }
     }
 
@@ -241,9 +245,9 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

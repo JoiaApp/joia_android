@@ -5,7 +5,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.joiaapp.joia.MainActivity;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.CreateUserRequest;
@@ -37,14 +36,12 @@ public class UserService {
     private UserService me;
     private RequestQueue requestQueue;
     private User currentUser;
-    private MainActivity mainActivity;
     private GroupService groupService;
     private DataStorage dataStorage;
     private CookieManager cookieManager;
 
-    public UserService(MainActivity mainActivity, RequestQueue requestQueue, GroupService groupService, DataStorage dataStorage, CookieManager cookieManager, String serverBaseUrl) {
+    public UserService(RequestQueue requestQueue, GroupService groupService, DataStorage dataStorage, CookieManager cookieManager, String serverBaseUrl) {
         me = this;
-        this.mainActivity = mainActivity;
         this.requestQueue = requestQueue;
         this.groupService = groupService;
         this.dataStorage = dataStorage;
@@ -110,7 +107,7 @@ public class UserService {
         requestQueue.add(request);
     }
 
-    public void setCurrentUser(User currentUser) {
+    private void setCurrentUser(User currentUser) {
         dataStorage.set("CURRENT_USER", currentUser);
         this.currentUser = currentUser;
     }
@@ -127,7 +124,6 @@ public class UserService {
         cookieManager.clearSessionCookie();
         dataStorage.remove("CURRENT_USER");
         groupService.logout();
-        mainActivity.startSignInProcess();
     }
 
     public void createUserInGroup(User newUser, final Group group, final ResponseHandler<User> responseHandler) {

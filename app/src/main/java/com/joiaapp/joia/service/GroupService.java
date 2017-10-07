@@ -1,5 +1,6 @@
 package com.joiaapp.joia.service;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -9,12 +10,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
-import com.joiaapp.joia.util.GsonCookieRequest;
-import com.joiaapp.joia.util.GsonListCookieRequest;
-import com.joiaapp.joia.MainActivity;
-import com.joiaapp.joia.util.MiddleManResponseHandler;
 import com.joiaapp.joia.R;
-import com.joiaapp.joia.util.ResponseHandler;
 import com.joiaapp.joia.dto.Group;
 import com.joiaapp.joia.dto.Mention;
 import com.joiaapp.joia.dto.Message;
@@ -22,6 +18,10 @@ import com.joiaapp.joia.dto.User;
 import com.joiaapp.joia.dto.request.CreateGroupRequest;
 import com.joiaapp.joia.dto.request.InviteRequest;
 import com.joiaapp.joia.dto.request.JoinGroupRequest;
+import com.joiaapp.joia.util.GsonCookieRequest;
+import com.joiaapp.joia.util.GsonListCookieRequest;
+import com.joiaapp.joia.util.MiddleManResponseHandler;
+import com.joiaapp.joia.util.ResponseHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,14 +38,14 @@ import static android.content.ContentValues.TAG;
 public class GroupService {
     private String serverBaseUrl;
     private RequestQueue requestQueue;
-    private MainActivity mainActivity;
+    private Context context;
     private DataStorage dataStorage;
     private Group currentGroup;
     private List<Message> cachedGroupMessages = Collections.emptyList();
     private List<User> cachedGroupMembers = Collections.emptyList();
 
-    public GroupService(MainActivity mainActivity, DataStorage dataStorage, RequestQueue requestQueue, String serverBaseUrl) {
-        this.mainActivity = mainActivity;
+    public GroupService(Context context, DataStorage dataStorage, RequestQueue requestQueue, String serverBaseUrl) {
+        this.context = context;
         this.dataStorage = dataStorage;
         this.requestQueue = requestQueue;
         this.serverBaseUrl = serverBaseUrl;
@@ -110,7 +110,7 @@ public class GroupService {
         }).start();
          */
         if (user.getId() == null) {
-            return BitmapFactory.decodeResource(mainActivity.getApplicationContext().getResources(), R.mipmap.plus);
+            return BitmapFactory.decodeResource(context.getResources(), R.mipmap.plus);
         }
         if (user.getImage() != null) {
             try {
@@ -120,7 +120,7 @@ public class GroupService {
                 Log.w(TAG, "Failed to decode image", e);
             }
         }
-        return BitmapFactory.decodeResource(mainActivity.getApplicationContext().getResources(), R.mipmap.ic_launcher);
+        return BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
     }
 
     public void getGroupMessages(Group group, final ResponseHandler<List<Message>> responseHandler) {
@@ -181,7 +181,7 @@ public class GroupService {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     //TODO: handle failed saves, or better yet, update the server to accept a full message with mentions on it
-                    Toast toast = Toast.makeText(mainActivity.getApplicationContext(), "Failed to add mentions to a message.", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(context, "Failed to add mentions to a message.", Toast.LENGTH_LONG);
                     toast.show();
                 }
             });

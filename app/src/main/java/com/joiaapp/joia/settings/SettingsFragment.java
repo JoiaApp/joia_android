@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.joiaapp.joia.MainActivity;
 import com.joiaapp.joia.MainAppFragment;
 import com.joiaapp.joia.R;
 import com.joiaapp.joia.service.ServiceFactory;
@@ -43,13 +44,18 @@ public class SettingsFragment extends Fragment implements AdapterView.OnItemClic
         String clickedItem = (String) adapter.getItemAtPosition(position);
         switch (clickedItem) {
             case "Logout":
-                ServiceFactory.getUserService().logout();
+                logout();
                 break;
             case "Profile":
                 Intent intent = new Intent(getContext(), ProfileActivity.class);
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void logout() {
+        ServiceFactory.getUserService().logout();
+        ((MainActivity)getContext()).startSignInProcess();
     }
 
     @Override

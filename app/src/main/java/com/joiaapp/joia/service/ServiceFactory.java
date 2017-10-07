@@ -1,8 +1,9 @@
 package com.joiaapp.joia.service;
 
+import android.content.Context;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.joiaapp.joia.MainActivity;
 
 /**
  * Created by arnell on 5/24/2017.
@@ -19,19 +20,17 @@ public class ServiceFactory {
     private PromptService promptService;
     private UserService userService;
 
-    private ServiceFactory(MainActivity mainActivity) {
-        RequestQueue requestQueue = Volley.newRequestQueue(mainActivity.getApplicationContext());
-        cookieManager = new CookieManager(mainActivity);
-        dataStorage = new DataStorage(mainActivity);
-        groupService = new GroupService(mainActivity, dataStorage, requestQueue, SERVER_BASE_URL);
+    private ServiceFactory(Context applicationContext) {
+        RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
+        cookieManager = new CookieManager(applicationContext);
+        dataStorage = new DataStorage(applicationContext);
+        groupService = new GroupService(applicationContext, dataStorage, requestQueue, SERVER_BASE_URL);
         promptService = new PromptService(requestQueue, SERVER_BASE_URL);
-        userService = new UserService(mainActivity, requestQueue, groupService, dataStorage, cookieManager, SERVER_BASE_URL);
+        userService = new UserService(requestQueue, groupService, dataStorage, cookieManager, SERVER_BASE_URL);
     }
 
-    public static void init(MainActivity mainActivity) {
-        if (instance == null) {
-            instance = new ServiceFactory(mainActivity);
-        }
+    public static void init(Context applicationContext) {
+        instance = new ServiceFactory(applicationContext);
     }
 
     public static CookieManager getCookieManager() {

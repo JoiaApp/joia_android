@@ -3,6 +3,8 @@
           package="com.joiaapp.joia">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -43,7 +45,23 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name=".settings.ProfileActivity"
-                  android:screenOrientation="portrait"/>
+        <activity
+            android:name=".settings.ProfileActivity"
+            android:screenOrientation="portrait"/>
+
+        <receiver
+            android:name=".alarm.NotificationTapBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false"/>
+        <service
+            android:name=".alarm.AlarmIntentService"
+            android:exported="false"/>
+        <receiver android:name=".alarm.DeviceBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
