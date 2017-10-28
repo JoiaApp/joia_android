@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.joiaapp.joia.BuildConfig;
 
 /**
  * Created by arnell on 5/24/2017.
@@ -11,7 +12,7 @@ import com.android.volley.toolbox.Volley;
  */
 
 public class ServiceFactory {
-    private static final String SERVER_BASE_URL = "http://sample-env.qd8vv2zefd.us-west-2.elasticbeanstalk.com";
+    private static final String SERVER_BASE_URL = BuildConfig.JoiaServerUrl;
     private static ServiceFactory instance;
 
     private CookieManager cookieManager;
