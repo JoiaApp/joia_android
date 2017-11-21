@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.android.volley.VolleyError;
 import com.joiaapp.joia.dto.User;
@@ -23,27 +25,45 @@ import com.joiaapp.joia.util.SoftKeyboardVisibilityHandler;
  */
 
 public class SignInActivity extends Activity implements View.OnClickListener {
+    private ViewFlipper vfSignIn;
+    private ImageView ivOpalHeader;
 
+    private ViewGroup vgSignIn;
     private Button btnSubmit;
+    private Button btnForgot;
     private EditText etEmail;
     private EditText etPassword;
-    private ImageView ivOpalHeader;
+
+    private ViewGroup vgForgotPassword;
+    private EditText etForgotPasswordEmail;
+    private Button btnSubmitResetPassword;
+
 
     private static final int REGISTER_REQUEST_CODE = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register__sign_in);
+        setContentView(R.layout.signin__all);
 
-        btnSubmit = (Button) findViewById(R.id.btnSubmitSignIn);
-        btnSubmit.setOnClickListener(this);
-        etEmail = (EditText) findViewById(R.id.etEmail);
-        etPassword = (EditText) findViewById(R.id.etPassword);
+        vfSignIn = (ViewFlipper) findViewById(R.id.vfSignIn);
         ivOpalHeader = (ImageView) findViewById(R.id.ivOpalHeader);
 
-        RelativeLayout rlRegisterSignIn = (RelativeLayout) findViewById(R.id.rlRegisterSignIn);
-        SoftKeyboardVisibilityHandler.hideWhenKeyboardVisible(rlRegisterSignIn, ivOpalHeader);
+        vgSignIn = (ViewGroup) findViewById(R.id.loSignIn);
+        btnSubmit = (Button) findViewById(R.id.btnSubmitSignIn);
+        btnSubmit.setOnClickListener(this);
+        btnForgot = (Button) findViewById(R.id.btnForgotPassword);
+        btnForgot.setOnClickListener(this);
+        etEmail = (EditText) findViewById(R.id.etEmail);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+
+        vgForgotPassword = (ViewGroup) findViewById(R.id.loForgotPassword);
+        etForgotPasswordEmail = (EditText) vgForgotPassword.findViewById(R.id.etEmail);
+        btnSubmitResetPassword = (Button) vgForgotPassword.findViewById(R.id.btnSubmitResetPassword);
+        btnSubmitResetPassword.setOnClickListener(this);
+
+        LinearLayout llSignInAll = (LinearLayout) findViewById(R.id.llSignInAll);
+        SoftKeyboardVisibilityHandler.hideWhenKeyboardVisible(llSignInAll, ivOpalHeader);
     }
 
     @Override
@@ -54,6 +74,24 @@ public class SignInActivity extends Activity implements View.OnClickListener {
             if (email.length() > 0 && password.length() > 0) {
                 attemptToSignIn(email, password);
             }
+        } else if (v.equals(btnForgot)) {
+            etForgotPasswordEmail.setText(etEmail.getText().toString());
+            setDisplayedView(vgForgotPassword);
+        } else if (v.equals(btnSubmitResetPassword)) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Not yet implemented!", Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        switch (vfSignIn.getCurrentView().getId()) {
+            case R.id.loSignIn:
+                super.onBackPressed();
+                break;
+            case R.id.loForgotPassword:
+                setDisplayedView(vgSignIn);
+                break;
         }
     }
 
@@ -74,6 +112,11 @@ public class SignInActivity extends Activity implements View.OnClickListener {
                 toast.show();
             }
         });
+    }
+
+    private void setDisplayedView(View view) {
+        int viewIndex = vfSignIn.indexOfChild(view);
+        vfSignIn.setDisplayedChild(viewIndex);
     }
 
 

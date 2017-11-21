@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/llSignInAll"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include layout="@layout/opal_header"/>
+
+    <ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:id="@+id/vfSignIn"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/loSignIn"
+            layout="@layout/signin__signin"/>
+
+        <include
+            android:id="@+id/loForgotPassword"
+            layout="@layout/signin__forgot_password"/>
+
+    </ViewFlipper>
+</LinearLayout>

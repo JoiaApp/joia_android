@@ -5,58 +5,56 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/opal_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
-
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvEmail"
         style="@style/FieldLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/etEmail"
+        android:text="Email"
         android:layout_alignStart="@+id/etEmail"
-        android:layout_centerVertical="true"
-        android:text="Email"/>
+        android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="352dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tvPassword"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/editTextBottomMargin"
         android:ems="10"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/tvEmail"
+        android:layout_alignStart="@+id/tvPassword"/>
 
     <com.joiaapp.joia.CustomFontTextView
         android:id="@+id/tvPassword"
         style="@style/FieldLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/etPassword"
-        android:layout_alignStart="@+id/etPassword"
-        android:text="Password"/>
+        android:text="Password"
+        android:layout_below="@+id/etEmail"
+        android:layout_alignStart="@+id/etPassword"/>
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="352dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnSubmitSignIn"
-        android:layout_centerHorizontal="true"
         android:ems="10"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:layout_below="@+id/tvPassword"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         android:id="@+id/btnSubmitSignIn"
         style="@style/OrangeButton"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="30dp"
+        android:text="Submit"
+        android:layout_below="@+id/etPassword"
+        android:layout_toEndOf="@+id/tvEmail"/>
+
+    <Button
+        android:id="@+id/btnForgotPassword"
+        style="@style/LinkButton"
+        android:text="Forgot Password"
+        android:layout_below="@+id/btnSubmitSignIn"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/buttonMarginBottom"
-        android:layout_marginTop="@dimen/buttonMarginTop"
-        android:text="Submit"/>
+        android:layout_marginTop="12dp"/>
 
 </RelativeLayout>
